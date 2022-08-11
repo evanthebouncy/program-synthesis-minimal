@@ -1,6 +1,9 @@
 ---
 layout: default
 ---
+<footer>
+  <img src="{{ site.baseurl }}/assets/synthesis-primer1.png" alt="" css="display: flex; justify-content: center;">
+</footer>
 
 <div class="catalogue">
   {% for post in site.posts %}
@@ -12,10 +15,6 @@ layout: default
   {% for post in paginator.posts %}
     {% include catalogue_item.html %}
   {% endfor %}
-</div>
-
-<div> 
-  yo i exist for some reason?
 </div>
 
 <div class="pagination">

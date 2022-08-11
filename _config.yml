@@ -1,5 +1,5 @@
 # Site settings
-title:          program synthesis primer
+title:          a primer to program synthesis
 description:    "a practical introduction to modern program synthesis"
 # baseurl:        "/tale"
 # url:            "https://chesterhow.github.io"
@@ -8,8 +8,8 @@ description:    "a practical introduction to modern program synthesis"
 google_analytics: UA—XXXXXXXX-X
 
 # # Author
-# author:
-#   name:         Chester How
+author:
+  name:         evanthebouncy
 #   url:          https://chester.how
 #   email:        chesterhow@gmail.com
 
