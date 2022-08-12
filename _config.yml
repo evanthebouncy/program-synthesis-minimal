@@ -1,7 +1,7 @@
 # Site settings
 title:          a primer to program synthesis
 description:    "a practical introduction to modern program synthesis"
-baseurl:        ""
+# baseurl:        ""
 url:            "https://evanthebouncy.github.io/program-synthesis-primer/"
 
 # Google Analytics
