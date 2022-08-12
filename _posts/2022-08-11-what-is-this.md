@@ -20,6 +20,7 @@ Programming is the act of a person asking the computer to do something. Hacking 
 We program because computers can help us with difficult tasks. A human cannot multiplex different programs at 4GHz. A human cannot sort through 1000s of emails manually. I cannot deliver the blog to all of you in person.
 
 ![Image with caption](/assets/what-is-this/programming.png "programming")
+![Image with caption](/program-synthesis-primer/assets/what-is-this/programming.png "programming")
 
 ## what is program synthesis?
 Program synthesis is a system that makes programming easier. gcc frees you from having to write assembly (in the 70s and 80s, program synthesis literally used to mean compilers). Using "filter emails like this" makes creating a filter easier. Jekyll generating the website, pulling in different dependencies makes creating this blog easier. Thus, program synthesis is simply "easier programming" and must be stated in relative terms of the original "harder programming" context.
