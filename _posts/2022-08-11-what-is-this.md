@@ -35,11 +35,11 @@ Program synthesis is a system that makes programming easier. gcc frees you from 
  The synthesizer and the interpreter together is the interpreter++, which takes in program++ and does stuff. Thus, program synthesis is simply "easier programming" and must be stated in relationship with the original "harder programming" context.
 
 ## what is the end game?
-The end game is to make programming as easy as possible. To make it more concrete, we can take a [Joshian](https://youtu.be/RB78vRUO6X8) point of view, and look at human programmers as the ultimate synthesizer.
+We can take a [Joshian](https://youtu.be/RB78vRUO6X8) point of view, and let the goal of program synthesis be building a system that can subsitute for a human developer (programmer). The art of program synthesis is making program++ as humane as possible, while keeping the mapping between program++ and program tractable.
 
 ![Image with caption](/program-synthesis-primer/assets/what-is-this/synthesis-ultimate.png "human-program")
 
-Of course, we are not to be limited by human capabilities. The goal is to go even further beyond!! AAaaaaaAaaA[AAaaaAA](https://youtu.be/3FM2kbvYljw?t=18)AAaaAaahhHHhHHhH (okay I'll stop).
+Of course, we don't have to be limited by human programming capabilities. We aim to build a synthesizer that can to go even further beyond!! AAaaaaaAaaA[AAaaaAA](https://youtu.be/3FM2kbvYljw?t=18)AAaaAaahhHHhHHhH (okay I'll stop).
 
 -- evan  2022-08-11
 
