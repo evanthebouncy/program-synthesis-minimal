@@ -31,4 +31,8 @@ The interpreter, exe, is a function. It maps (f,x) → y. In our case, exe takes
 The task, spec, is a set of input-output pairs. It is a set of "test cases" indicating what does it mean for a program to be correct. In our case, it specifies which coordinates (of grass) should be inside, and which coordinates (of mushroom) should be outside. In the figure, spec = { (1,1)→True, (4,0)→False, (1,4)→False, (3,3)→True }.
 
 ### do a few programming problems by hand !
-Once you've defined (and implemented) the programming problem, it is good practice (I cannot recommend this enough) to do a few programming problems by hand. So go ahead and try it [here](https://gist.github.com/evanthebouncy/a23f4918077b7537081a437888d46317). You will be building a synthesizer that will take your spot later down the line, and by doing these problems by hand gives vital insights on how to build it.
+Once you've defined (and implemented) the programming problem, it is good practice (I cannot recommend this enough) to _do a few by hand_. [So go ahead and try it here](https://gist.github.com/evanthebouncy/a23f4918077b7537081a437888d46317). You will be building a synthesizer that will take your spot later down the line. Doing these problems by hand gives vital insights on how to build a working synthesizer.
+
+TODO
+
+define the synthesis problem, make a point about sandbox-simulation, i.e. the synthesizer has blackbox access to the execution, you also need to tell the synthesizer about the space of programs, etc . . . all that.
