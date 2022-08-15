@@ -124,12 +124,12 @@ _Some quick maff_ : Number of programs/rectangles is roughly `6^4`, inputs/coord
 
 ## a typical synthesis algorithm
 
-A typical program synthesis algorithm has a **program writer** that proposes different programs based on tasks, and a **program checker** that uses the interpreter and the specification to check if the proposed programs are correct. Rather than pre-computing the entirety of `M`, the algorithm samples elements from a specific row `M[spec,:]` dynamically.
+A typical program synthesis algorithm has a **program writer** that proposes different programs based on tasks, and a **program checker** that uses the interpreter and the specification to check if the proposed programs are correct. Rather than pre-computing the entirety of `M`, this algorithm samples elements from a specific row `M[spec,:]`.
 
 ![Image with caption](/program-synthesis-primer/assets/synthesis-problem/synthesizer-gut1.png "the synthesizer")
 
 ### program writer
-The program writer proposes programs given specs. Consider the most naive program writer that simply writes a random program.
+The writer proposes programs given specs. Consider the most naive program writer that simply writes a random program.
 
 {% highlight python %}
 def random_writer(spec):
@@ -147,7 +147,6 @@ def program_cheker(prog, spec):
 
 ### putting it together
 We will use `budget` to denote how many programs our writer can propose before giving up.
-The `is_correct` function we wrote is the checker we need -- it internally uses the interpreter.
 {% highlight python %}
 # a synthesizer that returns both a working program (if it finds any)
 # and the number of samples it took to find it
