@@ -161,7 +161,8 @@ def get_synthesizer(writer, checker, budget):
     return synthesizer
 {% endhighlight %}
 
-### let's try it!
+Let's try it!
+
 {% highlight python %}
 synthesizer = get_synthesizer(random_writer, program_cheker, 1000)
 spec1 = [( (0,4), outside), ( (4,1), outside), ( (1,1), inside), ( (3,3), inside)]
@@ -188,14 +189,15 @@ def better_writer(spec):
     return [T, D, L, R]
 {% endhighlight %}
 
-Let's try it
+Let's try it!
+
 {% highlight python %}
 synthesizer2 = get_synthesizer(better_writer, program_cheker, 1000)
 n_tries, prog = synthesizer2(spec1)
 print (n_tries, prog)
 # results vary, but I got 1 [1, 3, 1, 3], 23 [1, 3, 1, 3], 5 [1, 3, 1, 3], etc
 {% endhighlight %}
-This is much better than using the random writer.
+This is much better than using the random writer on eyeball value.
 
 ## exercise
 How do the writers compare on a variety of different specs? Can you come up with a even better program writer? Explore these questions by [using the synthesizer code here](https://gist.github.com/evanthebouncy/ffa855eac2caa38716b3bc8d8b62645a).
