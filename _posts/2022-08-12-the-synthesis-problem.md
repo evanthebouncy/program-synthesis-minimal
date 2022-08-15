@@ -200,7 +200,7 @@ print (n_tries, prog)
 This is much better than using the random writer on eyeball value.
 
 ## exercise
-How do the writers compare on a variety of different specs? Can you come up with a even better program writer? Explore these questions by [using the synthesizer code here](https://gist.github.com/evanthebouncy/ffa855eac2caa38716b3bc8d8b62645a).
+How do the writers compare on a variety of different specs? Can you come up with a even better program writer? Explain why a writer might be performing better than another using `M`. Explore these questions by [using the synthesizer code here](https://gist.github.com/evanthebouncy/ffa855eac2caa38716b3bc8d8b62645a).
 
 ## up next
 Next time we will fine-tune a language model for the program writer.
