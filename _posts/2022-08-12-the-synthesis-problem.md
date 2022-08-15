@@ -29,7 +29,7 @@ rectangle = [1,3,1,4]
 {% endhighlight %}
 
 ### input
-The input is a data-structure. Here, the input is a coordinate, defined by (col, row).
+The input is a data-structure. Here, the input is a coordinate, defined by (row, col).
 {% highlight python %}
 # the mushrooms and grass in our figure
 shroom1, shroom2 = (0,4), (4,1)
