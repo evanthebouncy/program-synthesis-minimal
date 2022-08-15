@@ -3,6 +3,7 @@ layout: post
 title:  "what you will find here"
 sticky: true
 hidden: true
+permalink: /what-is-synthesis/
 ---
 
 # so, you want to know about program synthesis?
@@ -43,5 +44,6 @@ Of course, we don't have to be limited by human programming capabilities. We aim
 
 -- evan  2022-08-11
 
-[continue to a working example](future link here)
+continue to work on [a typical synthesis problem](/program-synthesis-primer/typical-synthesis-problem/)
+
 
