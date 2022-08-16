@@ -12,7 +12,8 @@ layout: default
     {% endif %}
   {% endfor %}
 
-  {% for post in paginator.posts %}
+  {% assign hello = paginator.posts | reverse %}
+  {% for post in hello %}
     {% include catalogue_item.html %}
   {% endfor %}
 </div>

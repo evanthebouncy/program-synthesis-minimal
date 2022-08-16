@@ -112,19 +112,19 @@ With the synthesizer, a programmer can program in program++, which is simply the
 
 ![Image with caption](/program-synthesis-primer/assets/synthesis-problem/synthesis.png "the synthesis set up")
 
-### the `spec x prog` matrix `M`
+### the matrix M
 
-The synthesizer's job is spec → prog. Imagine you have infinite computation, and _pre-compute_ the following `M = spec x prog` matrix. The synthesis problem is : Given a specification (row), look up a program (column) such that the matrix entry of `M[spec,prog] = True`.
+Imagine you have infinite computation, and construct the following `M = spec x prog` matrix. Each row is a specification, each col is a program, and each entry relates the two using the interpreter -- `M[spec,prog] = is_correct(prog,spec)`. **M** _completely_ characterizes the synthesis problem. Assuming M can be built, the synthesis problem becomes : Given a spec (row), look up a prog (col) such that the matrix entry of `M[spec,prog] = True`.
 
 ![Image with caption](/program-synthesis-primer/assets/synthesis-problem/hardness1.png "the synthesis hardness")
 
 _Some quick maff_ : Number of programs/rectangles is roughly `6^4`, inputs/coordinates is `6^2`, outputs/booleans is `2`. There are `(6^2)*2` input-output pairs. Assuming up to 10 grass and mushrooms on the field, there are roughly `((6^2)*2)^10` specs. Thus, we need to pre-compute a matrix of `((6^2)*2)^10 x 6^4 = 4.852e+21`. [Oh no](https://youtu.be/JqXg20sm_i4). 
 
-`M` (in most cases) completely characterizes the synthesis problem. Program synthesis starts with writing down `M` -- the horrific combinatorial monster. Understanding and approximating the structure of `M` is the only way we can fight it.
+Synthesis starts with writing down M -- the horrific combinatorial monster. Understanding and approximating the structure of M is how we fight the monster with limited computations.
 
 ## a typical synthesis algorithm
 
-A typical program synthesis algorithm has a **program writer** that proposes different programs based on tasks, and a **program checker** that uses the interpreter and the specification to check if the proposed programs are correct. Rather than pre-computing the entirety of `M`, this algorithm samples elements from a specific row `M[spec,:]`.
+Rather than pre-computing the entirety of M, a typical program synthesis algorithm samples elements from a specific row `M[spec,:]`. This algorithm has a **program writer** that proposes different programs based on tasks, and a **program checker** that uses the interpreter and the specification to check if the proposed programs are correct. 
 
 ![Image with caption](/program-synthesis-primer/assets/synthesis-problem/synthesizer-gut1.png "the synthesizer")
 
