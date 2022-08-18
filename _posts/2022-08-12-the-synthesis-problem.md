@@ -112,9 +112,9 @@ With the synthesizer, a programmer can program in program++, which is simply the
 
 ![Image with caption](/program-synthesis-primer/assets/synthesis-problem/synthesis.png "the synthesis set up")
 
-### the matrix M
+### the meaning matrix M
 
-Imagine you have infinite computation, and construct the following `M = spec x prog` matrix. Each row is a specification, each col is a program, and each entry relates the two using the interpreter -- `M[spec,prog] = is_correct(prog,spec)`. **M** _completely_ characterizes the synthesis problem. Assuming M can be built, the synthesis problem becomes : Given a spec (row), look up a prog (col) such that the matrix entry of `M[spec,prog] = True`.
+Imagine you have infinite computation, and construct the **meaning matrix** `M = spec x prog`. Each row is a specification, each col is a program, and each entry relates the two using the interpreter -- `M[spec,prog] = is_correct(prog,spec)`. M _completely_ characterizes the synthesis problem. Assuming M can be built, the synthesis problem becomes : Given a spec (row), look up a prog (col) such that the matrix entry of `M[spec,prog] = True`.
 
 ![Image with caption](/program-synthesis-primer/assets/synthesis-problem/hardness1.png "the synthesis hardness")
 
