@@ -1,7 +1,7 @@
 ---
 layout: post
-title:  "a typical program synthesis problem"
-permalink: /typical-synthesis-problem/
+title:  "what is program synthesis"
+permalink: /what-is-synthesis/
 ---
 
 As [Leslie](https://people.csail.mit.edu/lpk/) puts it, you must _define_ the problem first before _solving_ it. This post is about how to define and analyize a typical synthesis problem, along with a naive solution.
@@ -112,9 +112,11 @@ With the synthesizer, a programmer can program in program++, which is simply the
 
 ![Image with caption](/program-synthesis-primer/assets/synthesis-problem/synthesis.png "the synthesis set up")
 
+The synthesis problem is turning tasks into programs. It is formalized using the meaning matrix.
+
 ### the meaning matrix M
 
-Imagine you have infinite computation, and construct the **meaning matrix** `M = spec x prog`. Each row is a specification, each col is a program, and each entry relates the two using the interpreter -- `M[spec,prog] = is_correct(prog,spec)`. M _completely_ characterizes the synthesis problem. Assuming M can be built, the synthesis problem becomes : Given a spec (row), look up a prog (col) such that the matrix entry of `M[spec,prog] = True`.
+Imagine you have infinite computation, and construct the **meaning matrix** `M = spec x prog`. Each row is a specification, each col is a program, and each entry relates the two using the interpreter -- `M[spec,prog] = is_correct(prog,spec)`. M _completely_ characterizes the synthesis problem. Assuming M can be built, the synthesis problem becomes trivial: Given a spec (row), look up a prog (col) such that the matrix entry of `M[spec,prog] = True`.
 
 ![Image with caption](/program-synthesis-primer/assets/synthesis-problem/hardness1.png "the synthesis hardness")
 
@@ -200,9 +202,9 @@ print (n_tries, prog)
 This is much better than using the random writer on eyeball value.
 
 ## exercise
-How do the writers compare on a variety of different specs? Can you come up with a even better program writer? Explain why a writer might be performing better than another using `M`. Explore these questions by [using the synthesizer code here](https://gist.github.com/evanthebouncy/ffa855eac2caa38716b3bc8d8b62645a).
+How do the writers compare on a variety of different specs? Can you come up with a even better program writer? Explore these questions by [using the synthesizer code here](https://gist.github.com/evanthebouncy/ffa855eac2caa38716b3bc8d8b62645a).
 
 ## up next
-Next time we will fine-tune a language model for the program writer.
+The next post cover how to automatically train a program writer using language modeling.
 
 -- evan 2022-08-12
