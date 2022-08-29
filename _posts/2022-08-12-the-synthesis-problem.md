@@ -1,7 +1,7 @@
 ---
 layout: post
-title:  "what is program synthesis"
-permalink: /what-is-synthesis/
+title:  "a typical synthesis problem"
+permalink: /typical-synthesis-problem/
 ---
 
 As [Leslie](https://people.csail.mit.edu/lpk/) puts it, you must _define_ the problem first before _solving_ it. This post is about how to define and analyize a typical synthesis problem, along with a naive solution.
