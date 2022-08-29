@@ -128,7 +128,7 @@ print (r_spec) # [((5, 2), False), ((4, 4), False), ((0, 1), False), ((3, 3), Tr
 
 We can generate a **dataset** D by first generating a program, then generate its specification.
 
-![Image with caption](/program-synthesis-primer/assets/generating-programs/generate-d.png ){: width="90%" }
+![Image with caption](/program-synthesis-primer/assets/generating-programs/generate-D.png ){: width="90%" }
 
 Each point of the dataset follows this distribution:
 
