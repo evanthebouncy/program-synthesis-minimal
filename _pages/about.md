@@ -11,7 +11,7 @@ Program synthesis is useful -- Who wouldn't want to make a computer that automat
 Feel free to create an issue on [GitHub](https://github.com/evanthebouncy/program-synthesis-primer) or contact me.
 
 ## about me
-Evan (Yewen) Pu is a researcher working on making programming more communicative. He has been in the field of program synthesis since 2010.
+Evan (Yewen) Pu is a researcher working on making programming more communicative. He has been in the field of program synthesis since 2010, and was adviced by Armando Solar-Lezama and Leslie Kaebling during his PhD.
 
 ### redes sociales 
 [scholar](https://scholar.google.com/citations?user=LJnNKXMAAAAJ&hl=en), [twitter](https://mobile.twitter.com/evanthebouncy) | I am evanthebouncy on all platforms
