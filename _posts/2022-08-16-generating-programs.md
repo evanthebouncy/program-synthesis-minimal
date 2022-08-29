@@ -197,11 +197,10 @@ def train_unigram(D):
     for prog, spec in D:
         T, D, L, R = eval(prog)
         spec_bitvec.append(spec_to_bitvec(spec))
-        # put some random corruption in the output to prevent overfitting
-        Ts.append(T if random.random() < 0.9 else random.choice(range(W)))
-        Ds.append(D if random.random() < 0.9 else random.choice(range(W)))
-        Ls.append(L if random.random() < 0.9 else random.choice(range(W)))
-        Rs.append(R if random.random() < 0.9 else random.choice(range(W)))
+        Ts.append(T)
+        Ds.append(D)
+        Ls.append(L)
+        Rs.append(R)
     # convert to numpy arrays
     spec_bitvec = np.array(spec_bitvec)
     Ts = np.array(Ts)
@@ -250,7 +249,7 @@ synthesizer5 = get_synthesizer(manual_writer, is_correct, 100)
 
 The customary plot comparing different synthesis algorithms shows **search budget** on the x axis, and **fraction of tasks solved** on the y axis.
 
-![Image with caption](/program-synthesis-primer/assets/generating-programs/synth-performance1.png ){: width="90%" }
+![Image with caption](/program-synthesis-primer/assets/generating-programs/synth-performance2.png ){: width="90%" }
 
 As we can see, our fitted unigram distribution works really well, even better than the manual solution. [All code for this post can be found here](https://gist.github.com/evanthebouncy/1703d3e9aee71ba9124405fdb30bd967)
 
