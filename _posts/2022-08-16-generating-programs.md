@@ -12,7 +12,6 @@ This post has dependencies on [the previous post](/program-synthesis-primer/what
 Let's re-use the same `spec` as before, the goal is to find a rectangle that meets the specification.
 ![Image with caption](/program-synthesis-primer/assets/generating-programs/spec.png "icons created by Freepik - Flaticon, monkik")
 
-
 ## the dream and the reality
 
 Given this `spec`, let's look up its corresponding row `M[spec,:]` in the meaning matrix.
@@ -253,11 +252,9 @@ The customary plot comparing different synthesis algorithms shows **search budge
 
 ![Image with caption](/program-synthesis-primer/assets/generating-programs/synth-performance1.png ){: width="90%" }
 
-As we can see, our fitted unigram distribution works really well, even better than the manual solution. 
-
-[All code for this post can be found here](https://gist.github.com/evanthebouncy/1703d3e9aee71ba9124405fdb30bd967)
+As we can see, our fitted unigram distribution works really well, even better than the manual solution. [All code for this post can be found here](https://gist.github.com/evanthebouncy/1703d3e9aee71ba9124405fdb30bd967)
 
 ## conclusion
-In this post we covered how to generate programs conditioned on specifications, using synthetically generated data. Up next we'll cover how to fine-tune a large language model for the same task, which offers additional flexibilities.
+In this post we covered how to obtain a reasonable program-generator by training on synthetically generated data. Up next we'll cover how to fine-tune a large language model for the same task, which offers additional flexibilities.
 
 -- evan 2022-08-29
