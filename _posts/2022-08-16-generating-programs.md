@@ -1,12 +1,12 @@
 ---
 layout: post
-title:  "generating programs"
+title:  "generating programs with language models"
 permalink: /generating-programs/
 ---
 
-A good program synthesis algorithm boils down to this -- Given a task, how do you generate a correct program with as few samples as possible? This post covers a few standard strategies.
+With infinite compute, program synthesis is trivial -- just look through all programs for one that works. In practice, we need to find a working program with as few samples as possible. This post covers how to _generate_ programs using language modeling.
 
-This post has dependencies on [the previous post](/program-synthesis-primer/typical-synthesis-problem/).
+This post has dependencies on [the previous post](/program-synthesis-primer/what-is-synthesis/). Let's start with a short re-cap.
 
 ## the problem
 Let's re-use the same `spec` as before, the goal is to find a rectangle that meets the specification.
@@ -19,7 +19,7 @@ Given this `spec`, let's look up its corresponding row `M[spec,:]` in the meanin
 
 ![Image with caption](/program-synthesis-primer/assets/generating-programs/a-row.png)
 
-The **ground-truth** distribution for program synthesis can be constructed using `M[spec,:]`, with probability proportional to whether the entry `M[spec,prog]` is correct. This distribution gives uniform probability over correct programs, and 0 probability over incorrect programs.
+The **ground-truth distribution** for program synthesis can be constructed using `M[spec,:]`, with probability proportional to whether the entry `M[spec,prog]` is correct. This distribution gives uniform probability over correct programs, and 0 probability over incorrect programs.
 
 ![Image with caption](/program-synthesis-primer/assets/generating-programs/ground-truth.png ){: width="70%" }
 
@@ -31,19 +31,15 @@ In practice, we resort to _approximating_ this ground-truth distribution using s
 
 ![Image with caption](/program-synthesis-primer/assets/generating-programs/approximate.png ){: width="75%" }
 
-This distribution is implemented by the synthesis algorithm -- a program writer proposes somewhat plausible programs, then a checker filters for correctness. 
+This distribution is implemented by the synthesis algorithm -- a program writer _proposes_ somewhat plausible programs, then a checker _filters_ for correctness. 
 
 ![Image with caption](/program-synthesis-primer/assets/synthesis-problem/synthesizer-gut.png )
 
-Thus, the better the writer (closer to ground-truth), the fewer programs the checker has to check. To implement a reasonable program writer, we turn to language modeling.
+Thus, the better the writer (closer to ground-truth), the fewer programs the checker has to check. To implement a reasonable program writer, we turn to language models.
 
-## language modeling
+# language models
 
- **language models** gives probabilies over sequences of characters. For a language model to be a good program writer, it needs to put high probabilities over sequences that _resemble_ correct programs. Let's suppose we want to generate a correct program `[1,3,1,4]` for our `spec`. Consider the following language models of various fidelity. 
-
-![Image with caption](/program-synthesis-primer/assets/generating-programs/language-modeling.png )
-
-Let's start with **unconditional language models**. These models do not take `spec` into account.
+ A **language model** gives probabilies over sequences of characters. For a language model to be a good program writer, it needs to put high probabilities over sequences that _resemble_ correct programs. We start with **unconditional language models** -- models that generates "good looking programs" that _do not_ take `spec` into account. 
 
 ### all strings
 We can generate a sequence by uniformly picking a random character a number of times. This language contains all possible strings.
@@ -52,10 +48,10 @@ def writer1():
     return ''.join(random.choice(string.printable) for i in range(9))
 print(writer1()) # you should see something like "=1Vi![Au37"
 {% endhighlight %}
-The string `[1,3,1,4]` has 9 characters, and each character has a probability of `1 / len(string.printable)`. Thus this writer has a `(1/100)^9` chance of stumbling across `[1,3,1,4]`.
+A typical program string such as `[1,3,1,4]` has 9 characters, and each character has a probability of `1 / len(string.printable)`. Thus this writer has a `(1/100)^9` chance of stumbling across it.
 
 ### writable programs
-We can restrict the generation to "reasonably looking sequences". In programming, this is done with a **domain specific language** (DSL), which identifies a "reasonable" subset of all-strings. The DSL is specified by a **grammar** -- a process capable of generating strings within the DSL.
+We can restrict the generation to "reasonably looking sequences". In programming, this is done with a **domain specific language** (DSL), which identifies a "reasonable" subset of all-strings. The DSL is specified by a **generator** -- a process capable of generating strings within the DSL.
 {% highlight python %}
 def writer2():
     # W is globally defined to be 6
@@ -66,7 +62,7 @@ def writer2():
     return '['+str(U)+','+str(D)+','+str(L)+','+str(R)+']'
 print(writer2()) # you should see something like "[5,2,1,0]"
 {% endhighlight %}
-By giving structure to the language, we increased our chance to `(1/6)^4`, despite our DSL containing uninterpretable programs such as `[5,2,1,0]`.
+By giving structure to the language, we increased our chance to `(1/6)^4` to encounter the program `[1,3,1,4]`, despite our DSL containing uninterpretable programs such as `[5,2,1,0]`.
 
 ### legal programs
 We can further refine our DSL to be "tighter" to exclude uninterpretable programs. 
@@ -80,34 +76,188 @@ def writer3():
     return '['+str(U)+','+str(D)+','+str(L)+','+str(R)+']'
 print (writer3()) # you should see something like "[0,2,4,5]"
 {% endhighlight %}
-What's our chances of stumbling across `[1,3,1,4]` now? I'll leave the combinatorics to you. 
+What's our chances of stumbling across `[1,3,1,4]` now? I'll leave the combinatorics to you -- is `writer3` uniform across all legal programs? 
 
 ### unconditional generation is important !
-In program synthesis, it is _crucial_ that you have a good enough program generator. This generator samples programs from a **prior distribution**, P(prog), unconditioned on the spec. One can use unconditional generation as a program writer as is.
+In program synthesis, it is _crucial_ that you have a good enough un-conditional generator. This generator samples programs from a **prior distribution**, `P(prog)`. One can use unconditional generation as a program writer as is.
 
 ![Image with caption](/program-synthesis-primer/assets/generating-programs/prior-synthesis.png ){: width="75%" }
 
-This often resulting in a "good enough" synthesis algorithm for a small space of programs.
+This often resulting in a "good enough" synthesis algorithm for a small space of programs, and is among the first things a synthesis practictioner will try.
 
 <br>
 <hr>
-[Let's take a break](https://youtu.be/jQJVHjlvuVE). no seriously follow along and stretch! the next part will be kind of intense.
+[Let's take a break](https://youtu.be/jQJVHjlvuVE). no seriously follow along and stretch! the next part will be intense.
 <hr>
 <br>
 
-# conditional generation
+# approximating ground-truth via training
 
-We can be creative and manually approximate the ground-truth distribution, for example, the `better_writer` from the last post. This strategy underpinned most classical program-synthesis algorithms. However, it is often simpler to _learn_ this approximation. 
+Rather than manually approximating ground-truth synthesis distribution, it is often simpler to _train_ a parameterized program-writer `P_theta(prog|spec)`. The objective is this:
 
-To do so, notice this remarkable property of program synthesis: While it is difficult to generate correct programs from specifications, _it is easy to generate correct specifications from programs_.
+<br>
+![Image with caption](/program-synthesis-primer/assets/generating-programs/approx-goal.png ){: width="90%" }
+<br>
+Which is to say, over some distribution of specs, minimize the KL distance between the ground-truth and the program-writer. 
+
+To turn this objective into an algorithm, we leverage a remarkable property of programs: while it is difficult to generate correct programs from specifications, it is trivial to generate correct specifications from programs.
 
 ## generating specifications from programs
 Given a program, we can generate a specification for it by: (1) sampling some random inputs, (2) executing the program to obtain their corresponding outputs.
 
 ![Image with caption](/program-synthesis-primer/assets/generating-programs/sampling-spec.png ){: width="90%" }
 
-## generating artifical dataset **D**
+This is what it looks like in code:
+{% highlight python %}
+def sample_input():
+    return random.randint(0,W-1), random.randint(0,W-1)
 
-We can generate an **dataset** `D` by first generating a program, then generate its specification.
+def sample_spec(prog):
+    # pick a number of inputs, up to 10 patches of mushroom / grass total
+    n_inputs = random.randint(1,10)
+    inputs = [sample_input() for i in range(n_inputs)]
+    prog = eval(prog) # needed since for this post progs are modelled as strings
+    outputs = [is_inside(prog, input) for input in inputs]
+    return list(zip(inputs, outputs))
+
+r_spec = sample_spec("[1,3,1,4]")
+print (r_spec) # [((5, 2), False), ((4, 4), False), ((0, 1), False), ((3, 3), True)]
+{% endhighlight %}
+
+## procedurally generating a dataset **D**
+
+We can generate a **dataset** D by first generating a program, then generate its specification.
 
 ![Image with caption](/program-synthesis-primer/assets/generating-programs/generate-d.png ){: width="90%" }
+
+Each point of the dataset follows this distribution:
+
+![Image with caption](/program-synthesis-primer/assets/generating-programs/joint-sample.png ){: width="50%" }
+
+This is what it looks like in code:
+
+{% highlight python %}
+def sample_D(n_samples):
+    D = []
+    for i in range(n_samples):
+        prog = writer3()
+        spec = sample_spec(prog)
+        D.append((prog, spec))
+    return D
+
+D = sample_D(10000)
+print (D[4542]) # should see something like ('[3,5,4,6]', [((1, 0), False), ((5, 0), False)])
+{% endhighlight %}
+
+One should view D as a *sampled summary* of the meaning matrix M. While it is impossible to enuemrate all entries of M, we can nonetheless take samples from it.
+
+## the approximation theorem of program synthesis
+
+For a parameterized program-writer, we can **use supervised learning on D** to approximate the ground-truth synthesis distribution. 
+
+![Image with caption](/program-synthesis-primer/assets/generating-programs/approx-kl.png ){: width="90%" }
+
+[Full proof typical in the style of variational inference, (X=spec, Y=prog)](/program-synthesis-primer/assets/generating-programs/proof.jpeg) with [kevin's approval](/program-synthesis-primer/assets/generating-programs/proof.png).
+
+While not an interesting theoretical result, this theorem has important practical implications. It shows that training a program-writer benefits from scaling: it will approach the ground-truth distribution in the limit, given a big enough D (that covers all of M) and flexible enough model class (neural nets). Furthermore, generating D can be entirely _procedural_, requiring no human annotations, making it attractive for self-play style of trainings.
+
+<br>
+<hr>
+[Let's take another break](https://www.youtube.com/watch?v=c--etqIJcow&ab_channel=RapidLiquid). We're almost done
+<hr>
+<br>
+
+# conditional generation using unigrams
+Let's put the theory into practice using our rectangle example. One of the simplest ways to generate programs is a **unigram distribution** where, conditioned on the `spec`, samples each attributes of the program _independently_ :
+
+![Image with caption](/program-synthesis-primer/assets/generating-programs/factored.png ){: width="90%" }
+
+Each of the T,D,L,R factors can then be treated as a multi-way classification problem. For no particular reason, we'll model it using `sklearn.linear_model.LogisticRegression()`.
+
+### encoding the spec
+We choose to encode the spec in the most naive way possible, as a linearized (WxWx2) grid, where the last "channel" indicate whether a coordinate in WxW is inside or outside the rectangle.
+
+{% highlight python %}
+def spec_to_bitvec(spec):
+    bitvec = np.zeros((W,W,2))
+    for coord,bool in spec:
+        # turn bool into a number 0 or 1
+        bool_num = 1 if bool else 0
+        bitvec[coord[0],coord[1],bool_num] = 1
+    # flatten the bitvec into a 1D array
+    return bitvec.flatten()
+{% endhighlight %}
+
+### fitting the factors independently
+
+{% highlight python %}
+import sklearn.linear_model
+# train the unigram distribution
+def train_unigram(D):
+    spec_bitvec, Ts, Ds, Ls, Rs = [], [], [], [], []
+    for prog, spec in D:
+        T, D, L, R = eval(prog)
+        spec_bitvec.append(spec_to_bitvec(spec))
+        # put some random corruption in the output to prevent overfitting
+        Ts.append(T if random.random() < 0.9 else random.choice(range(W)))
+        Ds.append(D if random.random() < 0.9 else random.choice(range(W)))
+        Ls.append(L if random.random() < 0.9 else random.choice(range(W)))
+        Rs.append(R if random.random() < 0.9 else random.choice(range(W)))
+    # convert to numpy arrays
+    spec_bitvec = np.array(spec_bitvec)
+    Ts = np.array(Ts)
+    Ds = np.array(Ds)
+    Ls = np.array(Ls)
+    Rs = np.array(Rs)
+    model_T = sklearn.linear_model.LogisticRegression()
+    model_T.fit(spec_bitvec, Ts)
+    model_D = sklearn.linear_model.LogisticRegression()
+    model_D.fit(spec_bitvec, Ds)
+    model_L = sklearn.linear_model.LogisticRegression()
+    model_L.fit(spec_bitvec, Ls)
+    model_R = sklearn.linear_model.LogisticRegression()
+    model_R.fit(spec_bitvec, Rs)
+    return model_T, model_D, model_L, model_R
+{% endhighlight %}
+
+### making a program-writer using the fitted unigrams
+{% highlight python %}
+def get_writer4(model_T, model_D, model_L, model_R):
+    def writer4(spec):
+        spec_bitvec = spec_to_bitvec(spec)
+        model_T_prob = model_T.predict_proba([spec_bitvec])[0]
+        model_T_sample = np.random.choice(range(len(model_T_prob)), p=model_T_prob)
+        model_D_prob = model_D.predict_proba([spec_bitvec])[0]
+        model_D_sample = np.random.choice(range(len(model_D_prob)), p=model_D_prob)
+        model_L_prob = model_L.predict_proba([spec_bitvec])[0]
+        model_L_sample = np.random.choice(range(len(model_L_prob)), p=model_L_prob)
+        model_R_prob = model_R.predict_proba([spec_bitvec])[0]
+        model_R_sample = np.random.choice(range(len(model_R_prob)), p=model_R_prob)
+        return '[{},{},{},{}]'.format(model_T_sample, model_D_sample, model_L_sample, model_R_sample)
+    return writer4
+{% endhighlight %}
+
+## compare different language models
+
+We can now create different program synthesizers by using different writers, including the manual `better_writer` algorithm from last post:
+
+{% highlight python %}
+synthesizer1 = get_synthesizer(lambda spec : writer1(), is_correct, 100)
+synthesizer2 = get_synthesizer(lambda spec : writer2(), is_correct, 100)
+synthesizer3 = get_synthesizer(lambda spec : writer3(), is_correct, 100)
+synthesizer4 = get_synthesizer(get_writer4(*train_unigram(D_train)), is_correct, 100)
+synthesizer5 = get_synthesizer(manual_writer, is_correct, 100)
+{% endhighlight %}
+
+The customary plot comparing different synthesis algorithms shows **search budget** on the x axis, and **fraction of tasks solved** on the y axis.
+
+![Image with caption](/program-synthesis-primer/assets/generating-programs/synth-performance1.png ){: width="90%" }
+
+As we can see, our fitted unigram distribution works really well, even better than the manual solution. 
+
+[All code for this post can be found here](https://gist.github.com/evanthebouncy/1703d3e9aee71ba9124405fdb30bd967)
+
+## conclusion
+In this post we covered how to generate programs conditioned on specifications, using synthetically generated data. Up next we'll cover how to fine-tune a large language model for the same task, which offers additional flexibilities.
+
+-- evan 2022-08-29
