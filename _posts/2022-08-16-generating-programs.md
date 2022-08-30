@@ -38,10 +38,10 @@ Thus, the better the writer (closer to ground-truth), the fewer programs the che
 
 # language models
 
- A **language model** gives probabilies over sequences of characters. For a language model to be a good program writer, it needs to put high probabilities over sequences that _resemble_ correct programs. We start with **unconditional language models** -- models that generates "good looking programs" that _do not_ take `spec` into account. 
+ A **language** is a set of strings (a sequence of characters). A **language model** assigns probabilies over the strings within a language. For a language model to be a good program writer, it needs to put high probabilities over strings that _resemble_ correct programs. We start with **unconditional language models** -- models that generates programs unconditioned on specifications. 
 
 ### all strings
-We can generate a sequence by uniformly picking a random character a number of times. This language contains all possible strings.
+We can generate a sequence by uniformly picking a random character a number of times. This language contains all possible strings of a certain length.
 {% highlight python %}
 def writer1():
     return ''.join(random.choice(string.printable) for i in range(9))
@@ -82,7 +82,7 @@ In program synthesis, it is _crucial_ that you have a good enough un-conditional
 
 ![Image with caption](/program-synthesis-primer/assets/generating-programs/prior-synthesis.png ){: width="75%" }
 
-This often resulting in a "good enough" synthesis algorithm for a small space of programs, and is among the first things a synthesis practictioner will try.
+This often resulting in a "good enough" synthesis algorithm for a small space of programs, and is among the first things a synthesis practictioner will try. We now turn to conditional generation.
 
 <br>
 <hr>
