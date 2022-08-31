@@ -119,7 +119,7 @@ The synthesis problem is turning tasks into programs. It is formalized using the
 
 Imagine you have infinite computation, and construct the **meaning matrix M** `M = spec x prog`. Each row is a specification, each col is a program, and each entry relates the two using the interpreter -- `M[spec,prog] = is_correct(prog,spec)`. 
 
-<ins>M completely characterizes the synthesis problem</ins>. Assuming M can be built, the synthesis problem becomes trivial: Given a spec (row), look up a prog (col) such that the matrix entry `M[spec,prog = True`.
+<ins>M completely characterizes the synthesis problem</ins>. Assuming M can be built, the synthesis problem becomes trivial: Given a spec (row), look up a prog (col) such that the matrix entry `M[spec,prog] = True`.
 
 ![Image with caption](/program-synthesis-primer/assets/synthesis-problem/hardness1.png "the synthesis hardness")
 
