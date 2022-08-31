@@ -22,7 +22,7 @@ The **ground-truth distribution** for program synthesis can be constructed using
 
 ![Image with caption](/program-synthesis-primer/assets/generating-programs/ground-truth.png ){: width="70%" }
 
-The _dream_ is that we can easily sample from the ground-truth distribution. The _reality_ is that sampling from this distribution is _hard_ -- While we can easily check whether a given program is correct with respect to the spec, coming up with such programs is difficult. 
+The _dream_ is that we can easily sample from the ground-truth distribution. <ins>The _reality_ is that sampling from the ground-truth distribution is _hard_</ins> -- While we can easily check whether a given program is correct with respect to the spec, coming up with such programs is difficult. 
 
 ## the synthesis algorithm
 
@@ -34,7 +34,7 @@ This distribution is implemented by the synthesis algorithm -- a program writer 
 
 ![Image with caption](/program-synthesis-primer/assets/synthesis-problem/synthesizer-gut.png )
 
-Thus, the better the writer (closer to ground-truth), the fewer programs the checker has to check. To implement a reasonable program writer, we turn to language models.
+Thus, <ins>the better the writer (closer to ground-truth), the fewer programs the checker has to check</ins>. To implement a reasonable program writer, we turn to language models.
 
 # language models
 
@@ -99,7 +99,7 @@ Rather than manually approximating ground-truth synthesis distribution, it is of
 <br>
 Which is to say, over some distribution of specs, minimize the KL distance between the ground-truth and the program-writer. 
 
-To turn this objective into an algorithm, we leverage a remarkable property of programs: while it is difficult to generate correct programs from specifications, it is trivial to generate correct specifications from programs.
+To turn this objective into an algorithm, we leverage a remarkable property of programs: while it is difficult to generate correct programs from specifications, <ins>it is trivial to generate correct specifications from programs</ins>.
 
 ## generating specifications from programs
 Given a program, we can generate a specification for it by: (1) sampling some random inputs, (2) executing the program to obtain their corresponding outputs.
@@ -150,15 +150,17 @@ print (D[4542]) # should see something like ('[3,5,4,6]', [((1, 0), False), ((5,
 
 ## D is a sample of M
 
-One should view the dataset D as a *sampled summary* of the meaning matrix M. While it is impossible to enuemrate all entries of M, we can nonetheless take samples from it.
+One should view <ins>the dataset D as a *sampled summary* of the meaning matrix M</ins>. While it is impossible to enuemrate all entries of M, we can nonetheless take samples from it.
 
 ![Image with caption](/program-synthesis-primer/assets/generating-programs/sample_D.png ){: width="80%" }
 
 ## the approximation theorem of program synthesis
 
-**theorem**: For a parameterized program-writer, we can **use supervised learning on D** to approximate the ground-truth synthesis distribution. 
+<br>
+<ins>**theorem**: For a parameterized program-writer, we can use supervised learning on D to approximate the ground-truth synthesis distribution.</ins>
 
 ![Image with caption](/program-synthesis-primer/assets/generating-programs/approx-kl.png ){: width="90%" }
+<br>
 
 [Full proof typical in the style of variational inference, (X=spec, Y=prog)](/program-synthesis-primer/assets/generating-programs/proof.jpeg) with [kevin's approval](/program-synthesis-primer/assets/generating-programs/proof.png).
 

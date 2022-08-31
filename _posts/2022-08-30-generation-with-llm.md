@@ -8,7 +8,7 @@ A program-writer is a conduit between specifications and programs. In this post,
 
 ## a menagerie of synthesizers
 
-The synthesizer has a difficult job. It takes in semantics -- what the program should _do_, and produces syntax -- how the program should _look_. Synthesis is running an interpreter backwards.
+The synthesizer has a difficult job. It takes in semantics -- what the program should _do_, and produces syntax -- how the program should _look_. <ins>Synthesis is running an interpreter backwards</ins>.
 
 ![Image with caption](/program-synthesis-primer/assets/llm-generation/dual.png){: width="75%" }
 
@@ -70,7 +70,7 @@ For these more complex tasks, we turn to fine-tuning.
 
 # fine-tuning large language models for synthesis
 
-When one **fine-tunes** a model, they take an existing model with reasonable weights, and _continue to train it_ on a specific dataset. We will be taking a llm trained on English and Python, and continue to train it on D -- a sample of the meaning matrix M of our rectangle domain. 
+When one **fine-tunes** a model, they take an existing model with reasonable weights, and _continue to train it_ on a specific dataset. <ins>In synthesis, we take a llm trained on English and Python, and continue to train it on D</ins> -- a sample of the meaning matrix M of our (rectangle) domain. 
 
 ## the model and the tokenizer
 
@@ -151,9 +151,9 @@ As the model is training, you will see the loss
 
 ![Image with caption](/program-synthesis-primer/assets/llm-generation/training_loss.png){: width="40%" }
 
-The loss can be interpreted as **per-token-perplexity**. A loss of `1.18` means the per-token-perplexity is `e^1.18 = 3.25`, or a 1 in 3.25 chance of sampling the corresponding token from the ground-truth string. A loss of `0.5` means the token-perplexity is `e^0.5 = 1.64`. 
+<ins>The loss can be interpreted as **per-token-perplexity**</ins>. A loss of `1.18` means the per-token-perplexity is `e^1.18 = 3.25`, or a 1 in 3.25 chance of sampling the corresponding token from the ground-truth string. A loss of `0.5` means the token-perplexity is `e^0.5 = 1.64`. 
 
-A target program has 4 free parameters (T,D,L,R), so at iteration-500, we have a chance of `1 / 3.25^4` or 1 in 112 to recover the target program, and at iteration-1000 we have a chance of `1 / 1.64^4` or 1 in 7.23. However, given a spec, there are _multiple_ satisfying programs beside the one target program given during training, so this is strictly a _lower bound_.
+A target program string, `[T,D,L,R]`, has a length of 9, so at iteration-500, we have a chance of `1 / 3.25^9` or 1 in 40453 to recover the target program, and at iteration-1000 we have a chance of `1 / 1.64^9` or 1 in 86. However, given a spec, there are _multiple_ satisfying programs beside the one target program given during training, so this is strictly a _lower bound_.
 
 ## inference
 
@@ -178,7 +178,7 @@ This result is quite incredible, after fine-tuning, a llm that in theory can gen
 
 ## making a synthesizer with fine-tuned llm
 
-We simply integrating the `llm_writer` into the synthesizer. As during training we have roughly 1 in 7.23 chance to recover the correct program (this being a lower bound), then a search budget of 20 is reasonable. As of today, inference from llm is still relatively slow compared to the tens of thousands of samples typically required for a SOTA program synthesizer, but I don't think this will be a problem few years down the road -- we just wait.
+We simply integrating the `llm_writer` into the synthesizer. As during training we have roughly 1 in 86 chance to recover the correct program (this being a lower bound), then a search budget of 20 is reasonable. <ins>As of today, inference from llm is still relatively slow compared to the tens of thousands of samples typically required for a SOTA program synthesizer</ins>, but I don't think this will be a problem few years down the road -- we just wait.
 
 {% highlight python %}
 def llm_writer(spec):
@@ -203,7 +203,7 @@ It requires [rectangle.py](https://gist.github.com/evanthebouncy/25114aaf0be20df
 
 This concludes my 4 part series on the primer to program synthesis, I hope you enjoyed reading it as much as I had fun writing it. I will post more synthesis topics as they become "mature enough" for a succinct blog post. I'll be announcing these updates on twitter.
 
-[Please follow my twitter for modern program synthesis contents](https://twitter.com/evanthebouncy) (tryna grow my twitter game lol).
+[!Please follow my twitter for more contents!](https://twitter.com/evanthebouncy) (tryna grow my twitter game lol).
 
 -- evan 2022-08-31
 

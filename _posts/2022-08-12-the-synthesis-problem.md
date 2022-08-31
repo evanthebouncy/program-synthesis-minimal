@@ -70,8 +70,9 @@ How does a programmer write a program, so that the interpreter does the right th
 There are many ways to specify a task -- imagine the different ways you can ask a developer to build an App. There are many ways to check if a program is "correct" -- imagine the different ways to test the App they built. In program synthesis, task and correctness are typically given as follows.
 
 ### task
-A task is an input-output specification (think of test-cases). Consider a different grid of mushrooms and grass. 
+A task is an input-output specification (think of test-cases). Here's a few `spec`s.
 {% highlight python %}
+spec_orig = [(grass1, inside), (grass2, inside), (shroom1, outside), (shroom2, outside)]
 shroom3 = (2,2)
 grass3 = (4,3)
 shroom4 = (5,4)
@@ -79,7 +80,7 @@ spec = [(shroom3, outside), (grass3, inside), (shroom4, outside)]
 {% endhighlight %}
 
 ### correctness
-The advantage of giving the task as input-output is that we can check for correctness automatically -- if executing the program on the inputs produces the corresponding outputs.
+The advantage of giving the task as input-output is that <ins>the computer can check for correctness automatically</ins> -- if executing the program on the inputs produces the corresponding outputs.
 {% highlight python %}
 def is_correct(program, spec):
     for inputt, output in spec:
@@ -114,9 +115,11 @@ With the synthesizer, a programmer can program in program++, which is simply the
 
 The synthesis problem is turning tasks into programs. It is formalized using the meaning matrix.
 
-### the meaning matrix M
+## characterize the synthesis problem with meaning matrix M
 
-Imagine you have infinite computation, and construct the **meaning matrix** `M = spec x prog`. Each row is a specification, each col is a program, and each entry relates the two using the interpreter -- `M[spec,prog] = is_correct(prog,spec)`. M _completely_ characterizes the synthesis problem. Assuming M can be built, the synthesis problem becomes trivial: Given a spec (row), look up a prog (col) such that the matrix entry of `M[spec,prog] = True`.
+Imagine you have infinite computation, and construct the **meaning matrix M** `M = spec x prog`. Each row is a specification, each col is a program, and each entry relates the two using the interpreter -- `M[spec,prog] = is_correct(prog,spec)`. 
+
+<ins>M completely characterizes the synthesis problem</ins>. Assuming M can be built, the synthesis problem becomes trivial: Given a spec (row), look up a prog (col) such that the matrix entry `M[spec,prog = True`.
 
 ![Image with caption](/program-synthesis-primer/assets/synthesis-problem/hardness1.png "the synthesis hardness")
 
@@ -199,7 +202,7 @@ n_tries, prog = synthesizer2(spec1)
 print (n_tries, prog)
 # results vary, but I got 1 [1, 3, 1, 3], 23 [1, 3, 1, 3], 5 [1, 3, 1, 3], etc
 {% endhighlight %}
-This is much better than using the random writer on eyeball value.
+This is much better than using the random writer on first glance.
 
 ## exercise
 How do the writers compare on a variety of different specs? Can you come up with a even better program writer? Explore these questions by [using the synthesizer code here](https://gist.github.com/evanthebouncy/ffa855eac2caa38716b3bc8d8b62645a).
