@@ -6,10 +6,10 @@ permalink: /generating-programs/
 
 With infinite compute, program synthesis is trivial -- just look through all programs for one that works. In practice, we need to find a working program with as few samples as possible. This post covers how to _generate_ programs using language modeling.
 
-This post has dependencies on [the previous post](/program-synthesis-primer/what-is-synthesis/). Let's start with a short re-cap.
+Let's start with a short re-cap of last post.
 
 ## the problem
-Let's re-use the same `spec` as before, the goal is to find a rectangle that meets the specification.
+The `spec` is find a rectangle that keeps the grass coordinates inside, and mushrooms outside.
 ![Image with caption](/program-synthesis-primer/assets/generating-programs/spec.png "icons created by Freepik - Flaticon, monkik")
 
 ## the dream and the reality
@@ -148,17 +148,28 @@ D = sample_D(10000)
 print (D[4542]) # should see something like ('[3,5,4,6]', [((1, 0), False), ((5, 0), False)])
 {% endhighlight %}
 
-One should view D as a *sampled summary* of the meaning matrix M. While it is impossible to enuemrate all entries of M, we can nonetheless take samples from it.
+## D is a sample of M
+
+One should view the dataset D as a *sampled summary* of the meaning matrix M. While it is impossible to enuemrate all entries of M, we can nonetheless take samples from it.
+
+![Image with caption](/program-synthesis-primer/assets/generating-programs/sample_D.png ){: width="80%" }
 
 ## the approximation theorem of program synthesis
 
-For a parameterized program-writer, we can **use supervised learning on D** to approximate the ground-truth synthesis distribution. 
+**theorem**: For a parameterized program-writer, we can **use supervised learning on D** to approximate the ground-truth synthesis distribution. 
 
 ![Image with caption](/program-synthesis-primer/assets/generating-programs/approx-kl.png ){: width="90%" }
 
 [Full proof typical in the style of variational inference, (X=spec, Y=prog)](/program-synthesis-primer/assets/generating-programs/proof.jpeg) with [kevin's approval](/program-synthesis-primer/assets/generating-programs/proof.png).
 
-While not an interesting theoretical result, this theorem has important practical implications. It shows that training a program-writer benefits from scaling: it will approach the ground-truth distribution in the limit, given a big enough D (that covers all of M) and flexible enough model class (neural nets). Furthermore, generating D can be entirely _procedural_, requiring no human annotations, making it attractive for self-play style of trainings.
+This is a typical result from most amortized inference set-ups, where the "forward" probability is simple and the "backward" can be learned. Nonetheless, this theorem has practical implications. 
+
+1. (scaling) training the program-writer will approach the ground-truth distribution in the limit
+    - given a big enough sample of D
+    - given a flexible enough model class of program-writers
+2. (procedural) generating D requires no human annotations
+    - the entirety of M is defined by progs, specs, and the interpreter that relates them
+    - attractive for self-play style of trainings
 
 <br>
 <hr>
@@ -251,7 +262,11 @@ The customary plot comparing different synthesis algorithms shows **search budge
 
 ![Image with caption](/program-synthesis-primer/assets/generating-programs/synth-performance2.png ){: width="90%" }
 
-As we can see, our fitted unigram distribution works really well, even better than the manual solution. [All code for this post can be found here](https://gist.github.com/evanthebouncy/1703d3e9aee71ba9124405fdb30bd967)
+As we can see, our fitted unigram writer performs even better than the manual solution.
+
+## code
+
+[All code for this post can be found here](https://gist.github.com/evanthebouncy/1703d3e9aee71ba9124405fdb30bd967). It depends on [rectangle.py](https://gist.github.com/evanthebouncy/25114aaf0be20df21468735aa7103bef)
 
 ## conclusion
 In this post we covered how to obtain a reasonable program-generator by training on synthetically generated data. Up next we'll cover how to fine-tune a large language model for the same task, which offers additional flexibilities.
