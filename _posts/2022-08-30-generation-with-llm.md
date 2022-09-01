@@ -26,7 +26,7 @@ This results in a messy co-evolution of DSL, interpreter, specification, and syn
 
 # large language models
 
-A **large language model** (llm) transforms an input text string to an output text string. Trained on an enormous amount of textual data, it can make some pretty surprising transformations. Below is an example from the openai-codex model, prompted with a textual input, the model generates the most likely string completion as output (shown in blue highlight).
+A **large language model** (llm) gives a distribution over strings (that can be) conditioned on a prefix string. Trained on an enormous amount of textual data, it can make some pretty surprising conditional generations. Below is an example from the openai-codex model, prompted with a textual input, it generates the most likely string completion as output (shown in blue highlight).
 
 ![openai codex](/program-synthesis-primer/assets/llm-generation/codex.png){: width="95%" }
 
@@ -40,8 +40,8 @@ Programs are stylized, patterned texts with distinct rules governing its generat
 
 ![openai codex](/program-synthesis-primer/assets/llm-generation/codex-prog.png){: width="70%" }
 
-### llm has conventional knowledge of human language
-Trained on human written text, llm has a basic understanding of human conventions.
+### llm has basic conventional knowledge of human language
+llm has some knowledge of human conventions, expressed in large volumes of internet text.
 
 ![openai codex](/program-synthesis-primer/assets/llm-generation/codex-convention.png){: width="95%" }
 
@@ -78,9 +78,11 @@ The model only operates over sequences of ids, and relies the tokenizer to trans
 
 ![Image with caption](/program-synthesis-primer/assets/llm-generation/tokenizer-model1.png){: width="100%" }
 
-We'll be using the very light-weight `byt5-base` model (2.17Gb). It treats each character (such as `a` or `]`) as its own token (total 256 token-ids). Compared to codex (>50k token-ids), it does not need to maintain a hefty embedding layer that maps tokens to a continuous representation. 
+We'll fine-tune the light-weight `byt5-base` model (2.17Gb). It treats each character (such as `a` or `]`) as its own token (total 256 token-ids). One does not need a "truly large" model, since we'll be giving it on plenty in-domain datapoints. Getting the model and the tokenizer is fairly easy.
 
-For fine-tuning, one does not need a "truly large" model, since we'll be giving it on plenty in-domain datapoints. Getting the model and the tokenizer is fairly easy.
+{::comment}
+Compared to codex (>50k token-ids), it does not need to maintain a hefty embedding layer that maps tokens to a continuous representation.
+{:/comment}
 
 {% highlight python %}
 !pip install transformers datasets

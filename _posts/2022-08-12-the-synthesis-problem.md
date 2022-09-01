@@ -46,7 +46,7 @@ outside = False
 ### interpreter
 The interpreter is a function (program, input) → output. In our case, given a rectangle and a coordinate, our interpreter checks if the coordinate is inside the rectangle.
 {% highlight python %}
-def is_inside(program, inputt):
+def interpret(program, inputt):
     T, D, L, R = program
     i, j = inputt
     return i >= T and i <= D and j >= L and j <= R
@@ -55,51 +55,62 @@ def is_inside(program, inputt):
 ### putting it together
 Does our rectangle include the grass, and exclude the mushrooms?
 {% highlight python %}
-assert is_inside(rectangle, grass1) == inside
-assert is_inside(rectangle, grass2) == inside
-assert is_inside(rectangle, shroom1) == outside
-assert is_inside(rectangle, shroom2) == outside
+assert interpret(rectangle, grass1) == inside
+assert interpret(rectangle, grass2) == inside
+assert interpret(rectangle, shroom1) == outside
+assert interpret(rectangle, shroom2) == outside
 print ("working as intended !")
 {% endhighlight %}
 
-## the programming problem
+## programming
 How does a programmer write a program, so that the interpreter does the right thing for a task?
 
-![Image with caption](/program-synthesis-primer/assets/synthesis-problem/programming-problem1.png "the programming problem")
+![Image with caption](/program-synthesis-primer/assets/synthesis-problem/does_right_stuff.png "the programming problem")
 
-There are many ways to specify a task -- imagine the different ways you can ask a developer to build an App. There are many ways to check if a program is "correct" -- imagine the different ways to test the App they built. In program synthesis, task and correctness are typically given as follows.
+There are many ways to specify a task -- imagine the different ways you can ask a developer to build an App. There are many ways to check if a program is "correct" -- imagine the different ways to test the App they built. People's real-life tasks can rarely be understood by computers. 
 
-### task
-A task is an input-output specification (think of test-cases). Here's a few `spec`s.
+### task as specifications
+
+A **specification** or `spec` is a way of stating the task so that both human and computer can agree on what needs to be done. In program synthesis, a `spec` is typically given as a list of input-outputs. <ins>Input-output is one of the rare, special form of communication that is readily understood by both humans and computers</ins>.
+
+Here are some specs.
 {% highlight python %}
-spec_orig = [(grass1, inside), (grass2, inside), (shroom1, outside), (shroom2, outside)]
+spec = [(grass1, inside), (grass2, inside), (shroom1, outside), (shroom2, outside)]
 shroom3 = (2,2)
 grass3 = (4,3)
 shroom4 = (5,4)
-spec = [(shroom3, outside), (grass3, inside), (shroom4, outside)]
+spec2 = [(shroom3, outside), (grass3, inside), (shroom4, outside)]
 {% endhighlight %}
 
 ### correctness
-The advantage of giving the task as input-output is that <ins>the computer can check for correctness automatically</ins> -- if executing the program on the inputs produces the corresponding outputs.
+With a `spec`, the computer can automatically decide if a program "did the right stuff" by checking if executing the program on the inputs produces the corresponding outputs.
 {% highlight python %}
 def is_correct(program, spec):
     for inputt, output in spec:
-        if is_inside(program, inputt) != output:
+        if interpret(program, inputt) != output:
             return False
     return True
 {% endhighlight %}
 
-### solve a few by hand !
-It is good (I cannot recommend this enough) to solving a few programming problems by hand. It gives insights on how to build a machine synthesizer capable of doing the same.
+### programming problem 
+A typical programming problem consists of a human writing both the specification and the program, and having the computer to check if the program meets the specification.
+
+![Image with caption](/program-synthesis-primer/assets/synthesis-problem/pre-synthesis.png "the programming problem")
+
+<ins>It is crucial to solving a few programming problems by hand before attempting program synthesis</ins>. It gives insights on how to build a machine synthesizer capable of doing the same.
 {% highlight python %}
-# let's try to make a rectangle that satisfy this new spec
+# let's try to make a rectangle that satisfy spec2
 rect2 = [1,3,1,4]
-print (is_correct(rectangle, spec)) # didn't work
+print (is_correct(rectangle, spec2)) # didn't work
 rect3 = [3,4,1,3]
-print (is_correct(rect3, spec)) # worked okay
+print (is_correct(rect3, spec2)) # worked okay
 {% endhighlight %}
 
-Our programming environment, `rectangle.py` [can be found here](https://gist.github.com/evanthebouncy/25114aaf0be20df21468735aa7103bef). You'll need it for later.
+Our programming environment, `rectangle.py` [can be found here](https://gist.github.com/evanthebouncy/25114aaf0be20df21468735aa7103bef).
+
+### the asymmetry
+
+Given a task, <ins>it is easier to write the specification than it is to program</ins>. This asymmetry alone motivates program synthesis. Do _not_ attempt program synthesis if this asymmetry is not present.
 
 <br>
 <hr>
@@ -109,11 +120,11 @@ Our programming environment, `rectangle.py` [can be found here](https://gist.git
 
 ## a typical synthesis problem
 
-With the synthesizer, a programmer can program in program++, which is simply the task itself.
+With the synthesizer, a programmer writes the specification (a form of easier programming), and leaves the programming to the synthesizer.
 
-![Image with caption](/program-synthesis-primer/assets/synthesis-problem/synthesis.png "the synthesis set up")
+![Image with caption](/program-synthesis-primer/assets/synthesis-problem/synthesis1.png "the synthesis set up"){: width="75%" }
 
-The synthesis problem is turning tasks into programs. It is formalized using the meaning matrix.
+The synthesis problem is turning specs into programs. It is formalized using the meaning matrix.
 
 ## characterize the synthesis problem with meaning matrix M
 

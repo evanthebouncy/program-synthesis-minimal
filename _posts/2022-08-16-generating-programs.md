@@ -92,7 +92,7 @@ This often resulting in a "good enough" synthesis algorithm for a small space of
 
 # approximating ground-truth via training
 
-Rather than manually approximating ground-truth synthesis distribution, it is often simpler to _train_ a parameterized program-writer `P_theta(prog|spec)`. The objective is this:
+Rather than approximating ground-truth synthesis distribution by hand, it is often simpler to _train_ a parameterized program-writer `P_theta(prog|spec)`. The objective is this:
 
 <br>
 ![Image with caption](/program-synthesis-primer/assets/generating-programs/approx-goal.png ){: width="90%" }
