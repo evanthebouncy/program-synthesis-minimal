@@ -9,7 +9,7 @@ With infinite compute, program synthesis is trivial -- just look through all pro
 Let's start with a short re-cap of last post.
 
 ## the problem
-The `spec` is find a rectangle that keeps the grass coordinates inside, and mushrooms outside.
+The `spec` is: rectangle that keeps the grass coordinates inside, and mushrooms outside.
 ![Image with caption](/program-synthesis-primer/assets/generating-programs/spec.png "icons created by Freepik - Flaticon, monkik")
 
 ## the dream and the reality
@@ -50,7 +50,7 @@ print(writer1()) # you should see something like "=1Vi![Au37"
 A typical program string such as `[1,3,1,4]` has 9 characters, and each character has a probability of `1 / len(string.printable)`. Thus this writer has a `(1/100)^9` chance of stumbling across it.
 
 ### writable programs
-We can restrict the generation to "reasonably looking sequences". In programming, this is done with a **domain specific language** (DSL), which identifies a "reasonable" subset of all-strings. The DSL is specified by a **generator** -- a process capable of generating strings within the DSL.
+We can restrict the generation to "strings that look like programs". This is done with a **domain specific language** (DSL), which identifies a "reasonable" subset of all-strings as programs. The DSL is specified by a **generator** -- a process capable of generating strings within the DSL.
 {% highlight python %}
 def writer2():
     # W is globally defined to be 6
@@ -77,8 +77,8 @@ print (writer3()) # you should see something like "[0,2,4,5]"
 {% endhighlight %}
 What's our chances of stumbling across `[1,3,1,4]` now? I'll leave the combinatorics to you -- is `writer3` uniform across all legal programs? 
 
-### unconditional generation is important !
-In program synthesis, it is _crucial_ that you have a good enough un-conditional generator. This generator samples programs from a **prior distribution**, `P(prog)`. One can use unconditional generation as a program writer as is.
+### unconditional generation is prior distribution of programs
+The language models covered so-far are un-conditional language models, with no way to "steer" it into different distributions. This is a **prior distribution** -- how programs are naturally distributed, in the absence of specifications. One can use the prior `P(prog)` as a program writer as is.
 
 ![Image with caption](/program-synthesis-primer/assets/generating-programs/prior-synthesis.png ){: width="75%" }
 
@@ -150,7 +150,7 @@ print (D[4542]) # should see something like ('[3,5,4,6]', [((1, 0), False), ((5,
 
 ## D is a sample of M
 
-One should view <ins>the dataset D as a *sampled summary* of the meaning matrix M</ins>. While it is impossible to enuemrate all entries of M, we can nonetheless take samples from it.
+One should view <ins>the dataset D as a *sampled summary* of the meaning matrix M</ins>. While it is impossible to enumerate all entries of M, we can nonetheless take samples from it.
 
 ![Image with caption](/program-synthesis-primer/assets/generating-programs/sample_D.png ){: width="80%" }
 
@@ -180,7 +180,7 @@ This is a typical result from most amortized inference set-ups, where the "forwa
 <br>
 
 # conditional generation using unigrams
-Let's put the theory into practice using our rectangle example. One of the simplest ways to generate programs is a **unigram distribution** where, conditioned on the `spec`, samples each attributes of the program _independently_ :
+Let's put the theory into practice using our rectangle example. One of the simplest ways to generate programs is a **unigram distribution** where, conditioned on the `spec`, samples each attributes of the program _independently_. Note that we're accepting this flawed assumption (the parameters of the rectangles are definitely not independent) for computational simplicity. 
 
 ![Image with caption](/program-synthesis-primer/assets/generating-programs/factored.png ){: width="90%" }
 
@@ -271,6 +271,9 @@ As we can see, our fitted unigram writer performs even better than the manual so
 [All code for this post can be found here](https://gist.github.com/evanthebouncy/1703d3e9aee71ba9124405fdb30bd967). It depends on [rectangle.py](https://gist.github.com/evanthebouncy/25114aaf0be20df21468735aa7103bef)
 
 ## conclusion
-In this post we covered how to obtain a reasonable program-generator by training on synthetically generated data. Up next we'll cover how to fine-tune a large language model for the same task, which offers additional flexibilities.
+In this post we covered how to obtain several reasonable program writers, including the generating from the prior, and by training on synthetically generated data.
 
 -- evan 2022-08-29
+
+## up next
+The next post cover we'll cover how to fine-tune a large language model for the same task, which offers additional flexibilities. [let's go for it](/program-synthesis-primer/generation-with-llm/)

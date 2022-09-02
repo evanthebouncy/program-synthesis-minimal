@@ -4,7 +4,7 @@ title:  "a typical synthesis problem"
 permalink: /typical-synthesis-problem/
 ---
 
-As [Leslie](https://people.csail.mit.edu/lpk/) puts it, you must _define_ the problem first before _solving_ it. This post is about how to define and analyize a typical synthesis problem, along with a naive solution.
+As [Leslie](https://people.csail.mit.edu/lpk/) puts it, you must _define_ the problem first before _solving_ it. This post is about how to define and analyze a typical synthesis problem, along with a naive solution.
 
 ## grass turtle and mushrooms
 Imagine you're building a rectangular turtle enclosure on a field of 6x6 grid. You want to keep the grass inside the enclosure, and keep the mushrooms outside.
@@ -218,7 +218,7 @@ This is much better than using the random writer on first glance.
 ## exercise
 How do the writers compare on a variety of different specs? Can you come up with a even better program writer? Explore these questions by [using the synthesizer code here](https://gist.github.com/evanthebouncy/ffa855eac2caa38716b3bc8d8b62645a).
 
-## up next
-The next post cover how to automatically train a program writer using language modeling.
-
 -- evan 2022-08-12
+
+## up next
+The next post cover how to systematically generate programs with language models. [let's go for it](/program-synthesis-primer/generating-programs/)

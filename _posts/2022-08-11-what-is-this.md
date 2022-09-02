@@ -8,7 +8,7 @@ permalink: /what-is-synthesis/
 
 # so, you want to know about program synthesis?
 
-Recently (as of 2022-08-xx), the topic of "building AI to write code" have become fashionable in both industry and academia, with [copilot](https://github.com/features/copilot) making its way to production (if you have not used it, stop reading and play with it first). However, program synthesis is more than generating few lines of code from comments. Programs are broadly useful in modeling both computation and communication, and whenever programs exist, program synthesis is sure to follow. 
+Recently (as of 2022-08-xx), the topic of "building AI to write code" has become fashionable in both industry and academia, with [copilot](https://github.com/features/copilot) making its way to production (if you have not used it, stop reading and play with it first). However, program synthesis is more than generating few lines of code from comments. Programs are broadly useful in modeling both computation and communication, and whenever programs exist, program synthesis is sure to follow. 
 
 <ins>This blog series is a primer to the **modern**, **practical** aspects of program synthesis.</ins> I intend to keep the write-ups concise, at a cost of accuracy. The examples will be pedagogical, introducing you to a concept and coding it up using off-the-shelf technologies, at a cost of fidelity. The goal is 入门 (to get your foot through the door), so you can read and replicate academic literatures, and have the confidence to apply program synthesis to your own works. 
 
@@ -44,6 +44,7 @@ Of course, we don't have to be limited by human programming capabilities. We aim
 
 -- evan  2022-08-11
 
-continue to work on [a typical synthesis problem](/program-synthesis-primer/typical-synthesis-problem/)
+## up next
+The next post covers how to set-up a typical synthesis problem. [let's go for it](/program-synthesis-primer/typical-synthesis-problem/)
 
 

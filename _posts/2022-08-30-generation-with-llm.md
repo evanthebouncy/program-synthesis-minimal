@@ -16,7 +16,7 @@ Given this hard problem, it seems reasonable that for every problem domain there
 
 ![Image with caption](/program-synthesis-primer/assets/llm-generation/zoo.png){: width="95%" }
 
-While they look cool, significant engineering efforts were required to ensure that:
+While they look cool, significant manual engineering efforts and domain expertise were required to ensure that:
 1. the tasks from a domain can be concisely expressed in the programming DSL
 2. the synthesizer can reliably interpret the specification in its given form
 3. the synthesizer can reliably generate legal programs in the DSL
@@ -26,7 +26,7 @@ This results in a messy co-evolution of DSL, interpreter, specification, and syn
 
 # large language models
 
-A **large language model** (llm) gives a distribution over strings (that can be) conditioned on a prefix string. Trained on an enormous amount of textual data, it can make some pretty surprising conditional generations. Below is an example from the openai-codex model, prompted with a textual input, it generates the most likely string completion as output (shown in blue highlight).
+A **large language model** (llm) gives a distribution over strings (which can be) conditioned on a prefix string. Trained on an enormous amount of textual data, it can make some pretty surprising conditional generations. Below is an example from the openai-codex model, prompted with a textual input, it generates the most likely string completion as output (shown in blue highlight).
 
 ![openai codex](/program-synthesis-primer/assets/llm-generation/codex.png){: width="95%" }
 
@@ -56,11 +56,11 @@ The specifications and programs are often easily represented as structured texts
 ![openai codex](/program-synthesis-primer/assets/llm-generation/codex-reframe.png){: width="80%" }
 
 ## where prompting falls short
-However, for more complex tasks, prompting alone will not work. For our rectangle example, prompting cannot be used to generate a valid rectangle for the spec.
+For our rectangle example, prompting cannot be used to generate a valid rectangle for the spec. In fact, llm+prompting fails very often for the specific problems we want to solve out of the box -- the llm is trained on internet text data that are too different from our task (in appearance).
 
 ![openai codex](/program-synthesis-primer/assets/llm-generation/prompt-fail1.png){: width="100%" }
 
-For these more complex tasks, we turn to fine-tuning.
+For more complex tasks, we turn to fine-tuning, which supplies the llm with in-domain data.
 
 <br>
 <hr>
@@ -106,9 +106,9 @@ D_test = sample_D(1000)
 {% endhighlight %}
 
 ## encoding the spec and prog
-Encoding is quite flexible, as long as you retain the nessesary information for the model to make the correct decision. You get to be creative here. 
+Encoding requires creativity -- you want to accentuate the information for the model to make the correct decision. The run-time of the transformer algorithm is O(n^2), which is sensitive to the length of the strings. Thus, I simply try to minimize the length of the spec represenation.
 
-Keep in mind that the transformer architecture is an O(n^2) algorithm, and is sensitive to the length of the strings. This is especially true for our `byt5` model, which treats each individual character as its own token. Thus, I simply try to shorten the spec represenation, and I leave the program representation as is -- a string repr that you can call `eval()` on.
+Do keep in mind that re-naming the tokens comes at a cost of how the model can interpret natural language -- for instance, if you rename 'blue' as '+'. I am not too familiar with using language as specification (yet) but I will become good at it and tell you all about it when I can :).
 
 {% highlight python %}
 def spec_to_str(spec):
@@ -203,7 +203,7 @@ It requires [rectangle.py](https://gist.github.com/evanthebouncy/25114aaf0be20df
 
 # conclusion
 
-This concludes my 4 part series on the primer to program synthesis, I hope you enjoyed reading it as much as I had fun writing it. I will post more synthesis topics as they become "mature enough" for a succinct blog post. I'll be announcing these updates on twitter.
+This concludes my 4 part series on the primer to program synthesis, I hope you enjoyed reading it as much as I had fun writing it. I will post more synthesis topics as they become "mature enough" for a succinct blog post. You can reach out to me and suggest new topics for me to write about. I'll be announcing these updates on twitter.
 
 [!Please follow my twitter for more contents!](https://twitter.com/evanthebouncy) (tryna grow my twitter game lol).
 
