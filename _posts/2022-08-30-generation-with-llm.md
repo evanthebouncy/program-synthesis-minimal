@@ -64,7 +64,7 @@ For more complex tasks, we turn to fine-tuning, which supplies the llm with in-d
 
 <br>
 <hr>
-[Let's take a break](https://youtu.be/BHfKutz21do) and stretch.
+[Let's take a break and vibe out](https://youtu.be/eB_k8rtRGwo). We'll be fine-tuning for real next.
 <hr>
 <br>
 
