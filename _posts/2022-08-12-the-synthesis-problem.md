@@ -9,14 +9,14 @@ As [Leslie](https://people.csail.mit.edu/lpk/) puts it, you must _define_ the pr
 ## grass turtle and mushrooms
 Imagine you're building a rectangular turtle enclosure on a field of 6x6 grid. You want to keep the grass inside the enclosure, and keep the mushrooms outside.
 
-![Image with caption](/program-synthesis-primer/assets/synthesis-problem/comic2.png "icons created by Freepik - Flaticon, monkik")
+![Image with caption](/program-synthesis-primer/assets/synthesis-problem/comic4.png "icons created by Freepik - Flaticon, monkik"){: width="75%" }
 
 Given a field, how do you quickly come up with a working rectangle?
 
 ## modeling programming
 Program synthesis starts with **programming**. Programming starts with an **interpreter**.
 
-![Image with caption](/program-synthesis-primer/assets/synthesis-problem/interpreter.png "the interpreter")
+![Image with caption](/program-synthesis-primer/assets/synthesis-problem/interpreter1.png "the interpreter"){: width="65%" }
 
 Here's how to model an interpreter for our task.
 
@@ -24,16 +24,18 @@ Here's how to model an interpreter for our task.
 The program is a data-structure. Here, a program is a rectangle, defined by top, down, left, right.
 
 {% highlight python %}
-# the rectangle in our figure
+# the rectangle in our figure, [T,D,L,R]
 rectangle = [1,3,1,4]
 {% endhighlight %}
 
 ### input
 The input is a data-structure. Here, the input is a coordinate, defined by (row, col).
 {% highlight python %}
-# the mushrooms and grass in our figure
-shroom1, shroom2 = (0,4), (4,1)
-grass1, grass2 = (1,1), (3,3)
+# the mushrooms and grass coordinates in our figure
+shroom1 = (0,4)
+shroom2 = (4,1)
+grass1 = (1,1)
+grass2 = (3,3)
 {% endhighlight %}
 
 ### output
@@ -44,13 +46,15 @@ outside = False
 {% endhighlight %}
 
 ### interpreter
-The interpreter is a function (program, input) → output. In our case, given a rectangle and a coordinate, our interpreter checks if the coordinate is inside the rectangle.
+The interpreter is a function (program, input) → output. In our case, given a program (a rectangle, i.e. `[1,3,1,4]`) and an input (a coordinate, i.e. `(3,3)`), our interpreter interprets, or *executes* the program on the input by returning if the coordinate is inside or outside the rectangle.
 {% highlight python %}
 def interpret(program, inputt):
     T, D, L, R = program
     i, j = inputt
     return i >= T and i <= D and j >= L and j <= R
 {% endhighlight %}
+
+The interpreter gives _semantics_ to a program -- without the interpreter, the program is but a lifeless pile of syntax (`[1,3,1,4]` isn't a rectangle on its own).
 
 ### putting it together
 Does our rectangle include the grass, and exclude the mushrooms?
@@ -71,7 +75,7 @@ There are many ways to specify a task -- imagine the different ways you can ask 
 
 ### task as specifications
 
-A **specification** or `spec` is a way of stating the task so that both human and computer can agree on what needs to be done. In program synthesis, a `spec` is typically given as a list of input-outputs. <ins>Input-output is one of the rare, special form of communication that is readily understood by both humans and computers</ins>.
+A **specification** or `spec` is a way of stating the task so that _both human and computer can agree_ on what needs to be done. In program synthesis, a `spec` is typically given as a list of input-outputs. <ins>Input-output is one of the rare, special form of communication that is readily understood by both humans and computers</ins>.
 
 Here are some specs.
 {% highlight python %}
@@ -97,7 +101,7 @@ A typical programming problem consists of a human writing both the specification
 
 ![Image with caption](/program-synthesis-primer/assets/synthesis-problem/pre-synthesis.png "the programming problem")
 
-<ins>It is crucial to solving a few programming problems by hand before attempting program synthesis</ins>. It gives insights on how to build a machine synthesizer capable of doing the same.
+<ins>It is crucial to solve a few programming problems by hand before attempting program synthesis</ins>. It gives insights on how to build a machine synthesizer capable of doing the same.
 {% highlight python %}
 # let's try to make a rectangle that satisfy spec2
 rect2 = [1,3,1,4]
@@ -110,7 +114,7 @@ Our programming environment, `rectangle.py` [can be found here](https://gist.git
 
 ### the asymmetry
 
-Given a task, <ins>it is easier to write the specification than it is to program</ins>. This asymmetry alone motivates program synthesis. Do _not_ attempt program synthesis if this asymmetry is not present.
+<ins>It is often easier to write the specification than it is to program</ins>. This asymmetry alone motivates program synthesis. Do _not_ attempt program synthesis if this asymmetry is not present[^deductive]. 
 
 <br>
 <hr>
@@ -222,3 +226,6 @@ How do the writers compare on a variety of different specs? Can you come up with
 
 ## up next
 The next post cover how to systematically generate programs with language models. [let's go for it](/program-synthesis-primer/generating-programs/)
+
+### notes
+[^deductive]: Deductive program synthesis typically has specifications more difficult to write than the program itself [read page 117-119 on how to reverse a list](https://dl.acm.org/doi/pdf/10.1145/357084.357090)

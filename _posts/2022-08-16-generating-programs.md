@@ -26,7 +26,7 @@ The _dream_ is that we can easily sample from the ground-truth distribution. <in
 
 ## the synthesis algorithm
 
-In practice, we resort to _approximating_ this ground-truth distribution using synthesis.
+In practice, we resort to _rejection sampling_ from this ground-truth distribution using synthesis.
 
 ![Image with caption](/program-synthesis-primer/assets/generating-programs/approximate.png ){: width="75%" }
 

@@ -46,7 +46,7 @@ llm has some knowledge of human conventions, expressed in large volumes of inter
 ![openai codex](/program-synthesis-primer/assets/llm-generation/codex-convention.png){: width="95%" }
 
 ### llm are reliable in generating syntactically complex programs
-Practitioners of program synthesis have avoided free-form text generation, as they're rarely coherent. However, llm are very good at generating stylistically consistent texts.
+Practitioners of program synthesis have avoided free-form text generation, as they're rarely coherent. However, llm are very good at generating stylistically consistent texts[^tweet1].
 
 ![openai codex](/program-synthesis-primer/assets/llm-generation/codex-coherent1.png){: width="60%" }
 
@@ -208,4 +208,7 @@ This concludes my 4 part series on the primer to program synthesis, I hope you e
 [!Please follow my twitter for more contents!](https://twitter.com/evanthebouncy) (tryna grow my twitter game lol).
 
 -- evan 2022-08-31
+
+### notes
+[^tweet1]: [gpt3 generating coherent codes](https://twitter.com/goodside/status/1563989550808154113)
 
