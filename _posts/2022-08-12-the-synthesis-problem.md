@@ -75,7 +75,9 @@ There are many ways to specify a task -- imagine the different ways you can ask 
 
 ### task as specifications
 
-A **specification** or `spec` is a way of stating the task so that _both human and computer can agree_ on what needs to be done. In program synthesis, a `spec` is typically given as a list of input-outputs. <ins>Input-output is one of the rare, special form of communication that is readily understood by both humans and computers</ins>.
+A **specification** or `spec` is a way of stating the task so that _both human and computer can agree_ on what needs to be done. In program synthesis, a `spec` is typically given as a list of input-outputs. <ins>Input-output is one of the rare, special form of communication that is readily understood by both humans and computers</ins>. 
+
+There are other forms of specifications, for instance, it could be an objective function[^gend] to be maximized, a set of constraints on the computer's behaviours[^markov-lim], or a natural language sentence[^dan]. I hope to cover these topics at a different time!
 
 Here are some specs.
 {% highlight python %}
@@ -138,7 +140,7 @@ Imagine you have infinite computation, and construct the **meaning matrix M** `M
 
 ![Image with caption](/program-synthesis-primer/assets/synthesis-problem/hardness1.png "the synthesis hardness")
 
-_Some quick maff_ : Number of programs/rectangles is roughly `6^4`, inputs/coordinates is `6^2`, outputs/booleans is `2`. There are `(6^2)*2` input-output pairs. Assuming up to 10 grass and mushrooms on the field, there are roughly `((6^2)*2)^10` specs. Thus, we need to pre-compute a matrix of `((6^2)*2)^10 x 6^4 = 4.852e+21`. [Oh no](https://youtu.be/JqXg20sm_i4). 
+So how difficult is synthesis? _Some quick maff_ : Number of programs/rectangles is roughly `6^4`, inputs/coordinates is `6^2`, outputs/booleans is `2`. There are `(6^2)*2` input-output pairs. Assuming up to 10 grass and mushrooms on the field, there are roughly `((6^2)*2)^10` specs. Thus, we need to pre-compute a matrix of `((6^2)*2)^10 x 6^4 = 4.852e+21`. [Oh no](https://youtu.be/JqXg20sm_i4). 
 
 Synthesis starts with writing down M -- the horrific combinatorial monster. Understanding and approximating the structure of M is how we fight the monster with limited computations.
 
@@ -228,4 +230,10 @@ How do the writers compare on a variety of different specs? Can you come up with
 The next post cover how to systematically generate programs with language models. [let's go for it](/program-synthesis-primer/generating-programs/)
 
 ### notes
-[^deductive]: Deductive program synthesis typically has specifications more difficult to write than the program itself [read page 117-119 on how to reverse a list](https://dl.acm.org/doi/pdf/10.1145/357084.357090)
+[^deductive]: [Read page 117-119 on how to reverse a list using deductive synthesis](https://dl.acm.org/doi/pdf/10.1145/357084.357090)
+
+[^gend]: [Generative design](https://www.autodesk.com/solutions/generative-design)
+
+[^markov-lim]: [On the Expressivity of Markov Reward](https://arxiv.org/abs/2111.00876)
+
+[^dan]: [Task-Oriented Dialogue as Dataflow Synthesis](https://youtu.be/jFCiYlK6Rb8)

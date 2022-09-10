@@ -40,6 +40,8 @@ The first synthesizers were compilers, which automatically generated code (assem
 
 Most modern synthesis are **inductive synthesis** -- where the algorithm performs a _search_ to find a solution that meets the specification. In neuro-symbolic[^neurosym] program synthesis, the search is performed with a neural-network, which proposes plausible (symbolic) programs. Recent (2020+) advances [^alphacode],[^codex] frequently leverages natural language (such as code comments) as additional context to guide the search (to generate python code). The subject of transforming natural language to executable programs (think siri or alexa) traditionally falls under **semantic-parsing**[^sem-parse],[^sem-tutorial]. 
 
+Lastly, as programs are flexible in representing symbolic knowledge, they have been used to model cognition [^joshrule],[^probmods], where learning can be thought of as a form of "program induction".
+
 As we cannot afford the space to go into it further, kindly refer to [^1],[^2] for more history.
 
 ## where do we stand now?
@@ -73,3 +75,7 @@ The next post covers how to set-up a typical synthesis problem. [let's go for it
 [^sem-parse]: [Bringing machine learning and compositional semantics together by Percy Liang](https://web.stanford.edu/~cgpotts/manuscripts/liang-potts-semantics.pdf)
 
 [^sem-tutorial]: [ACL 2018 tutorial on neural semantic parsing](https://github.com/allenai/acl2018-semantic-parsing-tutorial)
+
+[^joshrule]: [The Child as Hacker](http://colala.berkeley.edu/papers/rule2020child.pdf)
+
+[^probmods]: [Probabilistic Models of Cognition](http://probmods.org/)
