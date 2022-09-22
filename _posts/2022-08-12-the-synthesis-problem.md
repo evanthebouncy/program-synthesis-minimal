@@ -126,7 +126,7 @@ Our programming environment, `rectangle.py` [can be found here](https://gist.git
 
 ## a typical synthesis problem
 
-With the synthesizer, a programmer writes the specification (a form of easier programming), and leaves the programming to the synthesizer.
+With the synthesizer, a programmer writes the specification (a form of easier programming), and leaves the harder programming to the synthesizer.
 
 ![Image with caption](/program-synthesis-primer/assets/synthesis-problem/synthesis1.png "the synthesis set up"){: width="75%" }
 
@@ -140,7 +140,8 @@ Imagine you have infinite computation, and construct the **meaning matrix M** `M
 
 ![Image with caption](/program-synthesis-primer/assets/synthesis-problem/hardness1.png "the synthesis hardness")
 
-So how difficult is synthesis? _Some quick maff_ : Number of programs/rectangles is roughly `6^4`, inputs/coordinates is `6^2`, outputs/booleans is `2`. There are `(6^2)*2` input-output pairs. Assuming up to 10 grass and mushrooms on the field, there are roughly `((6^2)*2)^10` specs. Thus, we need to pre-compute a matrix of `((6^2)*2)^10 x 6^4 = 4.852e+21`. [Oh no](https://youtu.be/JqXg20sm_i4). 
+### using M to quantify difficulty
+How difficult is our synthesis problem? Some _quick maffs_ : Number of programs/rectangles is roughly `6^4`, inputs/coordinates is `6^2`, outputs/booleans is `2`. There are `(6^2)*2` input-output pairs. Assuming up to 10 grass and mushrooms on the field, there are roughly `((6^2)*2)^10` specs. Thus, we need to pre-compute a matrix of `((6^2)*2)^10 x 6^4 = 4.852e+21`. [Oh no](https://youtu.be/JqXg20sm_i4). 
 
 Synthesis starts with writing down M -- the horrific combinatorial monster. Understanding and approximating the structure of M is how we fight the monster with limited computations.
 
@@ -148,7 +149,7 @@ Synthesis starts with writing down M -- the horrific combinatorial monster. Unde
 
 Rather than pre-computing the entirety of M, a typical program synthesis algorithm samples elements from a specific row `M[spec,:]`. This algorithm has a **program writer** that proposes different programs based on tasks, and a **program checker** that uses the interpreter and the specification to check if the proposed programs are correct. 
 
-![Image with caption](/program-synthesis-primer/assets/synthesis-problem/synthesizer-gut1.png "the synthesizer")
+![Image with caption](/program-synthesis-primer/assets/synthesis-problem/synthesizer-gut2.png "the synthesizer")
 
 ### program writer
 The writer proposes programs given specs. Consider the most naive program writer that simply writes a random program.
