@@ -1,8 +1,8 @@
 # Site settings
-title:          a primer to program synthesis
-description:    "a practical introduction to modern program synthesis"
+title:          a minimalist guide to program synthesis
+description:    "a bare minimum introduction to modern program synthesis"
 url:            "https://evanthebouncy.github.io"
-baseurl:        "/program-synthesis-primer"
+baseurl:        "/program-synthesis-minimal"
 
 
 # Google Analytics

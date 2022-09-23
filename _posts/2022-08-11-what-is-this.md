@@ -18,20 +18,20 @@ Let us begin.
 
 ## programming
 Before computers, when a person has a task to do, they manually does stuff. This is tiring.
-![Image with caption](/program-synthesis-primer/assets/what-is-this/doing.png "doing")
+![Image with caption](/program-synthesis-minimal/assets/what-is-this/doing.png "doing")
 
 Programming is the act of a person asking the computer to do something. Hacking the linux kernel is programming. Creating an email filter is programming. Me setting up this blog is programming. One must always think of programming with these three: a programmer, a program, and an interpreter. A **programmer** turns a task into a program. A **program** is the thing that programmer gives, which the interpreter understands. An **interpreter** takes in the program and does stuff.
 
 <!-- 
 Programming consists of a **programmer**, who writes a **program**, which is executed on an **interpreter**. One must think about programming with all three in mind! -->
-![Image with caption](/program-synthesis-primer/assets/what-is-this/programming1.png "programming")
+![Image with caption](/program-synthesis-minimal/assets/what-is-this/programming1.png "programming")
 
 We program because interpreters (computers) can help us with difficult tasks. A human cannot multiplex different apps at 4GHz. A human cannot sort through 1000s of emails manually. I cannot deliver the blog to all of you in person.
 
 ## program synthesis
 Program synthesis is a system that makes programming easier. gcc frees you from having to write assembly. Using "filter emails like this" makes creating a filter easier. Jekyll generating the website makes creating this blog easier. With program synthesis, the programmer can now program using "program++", which is easier to use than "program". The **synthesizer** is a middle-man programmer, which turns program++ into a program.
 
-![Image with caption](/program-synthesis-primer/assets/what-is-this/prog_plus.png "synthesis")
+![Image with caption](/program-synthesis-minimal/assets/what-is-this/prog_plus.png "synthesis")
 
  Together, the synthesizer and the interpreter becomes a better interpreter, the "interpreter++", which takes in program++ (commonly called a **spec** for specification) and does stuff. Note how this process can be recursive, where we build layers upon layers of synthesizers/interpreters, making it easier and easier for a human to program. Thus, program synthesis is simply "easier programming" -- one step of this recursive process -- and must be stated in relationship with the original "harder programming" context. Let's see some examples.
 
@@ -50,14 +50,14 @@ Program synthesis had a fairly big 门槛 (entry barrier). You needed expertise 
 ## what is the end game?
 We can take a [Joshian](https://youtu.be/RB78vRUO6X8) point of view (gesturing wildly at humans), and let the goal of program synthesis be building a system that can subsitute for a human developer (programmer) -- who turns fully naturalistic human-human interactions into working programs. The art of program synthesis is making program++/specification as humane as possible, while keeping the mapping between program++ and program tractable.
 
-![Image with caption](/program-synthesis-primer/assets/what-is-this/synthesis-ultimate1.png "human-program")
+![Image with caption](/program-synthesis-minimal/assets/what-is-this/synthesis-ultimate1.png "human-program")
 
 Of course, we don't have to be limited by human programming capabilities. We aim to build a synthesizer that can to go even further beyond!! AAaaaaaAaaA[AAaaaAA](https://youtu.be/3FM2kbvYljw?t=18)AAaaAaahhHHhHHhH (okay I'll stop).
 
 -- evan  2022-08-11
 
 ## up next
-The next post covers how to set-up a typical synthesis problem. [let's go for it](/program-synthesis-primer/typical-synthesis-problem/)
+The next post covers how to set-up a typical synthesis problem. [let's go for it](/program-synthesis-minimal/typical-synthesis-problem/)
 
 ### notes
 [^1]: [Armando's lecture notes on definition and history of program synthesis](https://people.csail.mit.edu/asolar/SynthesisCourse/Lecture1.htm)

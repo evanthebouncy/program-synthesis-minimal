@@ -10,11 +10,11 @@ A program-writer is a conduit between specifications and programs. In this post,
 
 The synthesizer has a difficult job. It takes in semantics -- what the program should _do_, and produces syntax -- how the program should _look_. <ins>Synthesis is running an interpreter backwards</ins>.
 
-![Image with caption](/program-synthesis-primer/assets/llm-generation/dual.png){: width="75%" }
+![Image with caption](/program-synthesis-minimal/assets/llm-generation/dual.png){: width="75%" }
 
 Given this hard problem, it seems reasonable that for every problem domain there needs to be a domain-specific synthesizer tailored to it. This has indeed been the case. Here's a collection of program-writer architectures in some of my works.
 
-![Image with caption](/program-synthesis-primer/assets/llm-generation/zoo.png){: width="95%" }
+![Image with caption](/program-synthesis-minimal/assets/llm-generation/zoo.png){: width="95%" }
 
 While they look cool, significant manual engineering efforts and domain expertise were required to ensure that:
 1. the tasks from a domain can be concisely expressed in the programming DSL
@@ -28,7 +28,7 @@ This results in a messy co-evolution of DSL, interpreter, specification, and syn
 
 A **large language model** (llm) gives a distribution over strings (which can be) conditioned on a prefix string. Trained on an enormous amount of textual data, it can make some pretty surprising conditional generations. Below is an example from the openai-codex model, prompted with a textual input, it generates the most likely string completion as output (shown in blue highlight).
 
-![openai codex](/program-synthesis-primer/assets/llm-generation/codex.png){: width="95%" }
+![openai codex](/program-synthesis-minimal/assets/llm-generation/codex.png){: width="95%" }
 
 The capabilities and limitations of llm are (as of 2022-aug) still being investigated. As I am learning about it myself, I encourage you to become familiar with them elsewhere. 
 
@@ -38,27 +38,27 @@ These are my own assessments on why llm are useful for program synthesis. To mak
 ### llm can pick-up programmatic patterns
 Programs are stylized, patterned texts with distinct rules governing its generation and interpretation. It seems llm are predisposed to pick up these programmatic patterns.
 
-![openai codex](/program-synthesis-primer/assets/llm-generation/codex-prog.png){: width="70%" }
+![openai codex](/program-synthesis-minimal/assets/llm-generation/codex-prog.png){: width="70%" }
 
 ### llm has basic conventional knowledge of human language
 llm has some knowledge of human conventions, expressed in large volumes of internet text.
 
-![openai codex](/program-synthesis-primer/assets/llm-generation/codex-convention.png){: width="95%" }
+![openai codex](/program-synthesis-minimal/assets/llm-generation/codex-convention.png){: width="95%" }
 
 ### llm are reliable in generating syntactically complex programs
 Practitioners of program synthesis have avoided free-form text generation, as they're rarely coherent. However, llm are very good at generating stylistically consistent texts[^tweet1].
 
-![openai codex](/program-synthesis-primer/assets/llm-generation/codex-coherent1.png){: width="60%" }
+![openai codex](/program-synthesis-minimal/assets/llm-generation/codex-coherent1.png){: width="60%" }
 
 ### llm operates over text -- a universal datatype
 The specifications and programs are often easily represented as structured texts, this allow you to easily integrate program synthesis with an existing programming system, or iterate through different DSLs and specification languages -- no parser required.
 
-![openai codex](/program-synthesis-primer/assets/llm-generation/codex-reframe.png){: width="80%" }
+![openai codex](/program-synthesis-minimal/assets/llm-generation/codex-reframe.png){: width="80%" }
 
 ## where prompting falls short
 For our rectangle example, prompting cannot be used to generate a valid rectangle for the spec. In fact, llm+prompting fails very often for the specific problems we want to solve out of the box -- the llm is trained on internet text data that are too different from our task (in appearance).
 
-![openai codex](/program-synthesis-primer/assets/llm-generation/prompt-fail1.png){: width="100%" }
+![openai codex](/program-synthesis-minimal/assets/llm-generation/prompt-fail1.png){: width="100%" }
 
 For more complex tasks, we turn to fine-tuning, which supplies the llm with in-domain data.
 
@@ -76,7 +76,7 @@ When one **fine-tunes** a model, they take an existing model with reasonable wei
 
 The model only operates over sequences of ids, and relies the tokenizer to translate between strings and ids. Here is how the [codex model turns a string into a sequence of token-ids](https://beta.openai.com/tokenizer):
 
-![Image with caption](/program-synthesis-primer/assets/llm-generation/tokenizer-model1.png){: width="100%" }
+![Image with caption](/program-synthesis-minimal/assets/llm-generation/tokenizer-model1.png){: width="100%" }
 
 We'll fine-tune the light-weight `byt5-base` model (2.17Gb). It treats each character (such as `a` or `]`) as its own token (total 256 token-ids). One does not need a "truly large" model, since we'll be giving it on plenty in-domain datapoints. Getting the model and the tokenizer is fairly easy.
 
@@ -126,7 +126,7 @@ def spec_to_str(spec):
 
 The collator takes a batch of input-outputs of different lengths and pad it into nice "rectangular" tensors that can be fed into the model for training.
 
-![Image with caption](/program-synthesis-primer/assets/llm-generation/collator.png){: width="80%" }
+![Image with caption](/program-synthesis-minimal/assets/llm-generation/collator.png){: width="80%" }
 
 This is what it looks like in code:
 {% highlight python %}
@@ -151,7 +151,7 @@ trainer.train()
 
 As the model is training, you will see the loss
 
-![Image with caption](/program-synthesis-primer/assets/llm-generation/training_loss.png){: width="40%" }
+![Image with caption](/program-synthesis-minimal/assets/llm-generation/training_loss.png){: width="40%" }
 
 <ins>The loss can be interpreted as **per-token-perplexity**</ins>. A loss of `1.18` means the per-token-perplexity is `e^1.18 = 3.25`, or a 1 in 3.25 chance of sampling the corresponding token from the ground-truth string. A loss of `0.5` means the token-perplexity is `e^0.5 = 1.64`. 
 
@@ -193,7 +193,7 @@ synthesizer6 = get_synthesizer(llm_writer, is_correct, 20)
 
 As we can see, by simply manipulating some strings, we were able to beat the other baselines in performance. Since llm are fully expressive, it does not have the issue of under-fitting (unlike the unigram-writer) and continued training will only increase performance.
 
-![Image with caption](/program-synthesis-primer/assets/llm-generation/result.png){: width="80%" }
+![Image with caption](/program-synthesis-minimal/assets/llm-generation/result.png){: width="80%" }
 
 ## code
 

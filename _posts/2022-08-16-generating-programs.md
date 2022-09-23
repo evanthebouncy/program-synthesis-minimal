@@ -10,18 +10,18 @@ Let's start with a short recap of last post.
 
 ## the problem
 The task is make a rectangle that keeps the grass coordinates inside, and mushroom coordinates outside. This task is represented as a specification of input-outputs, `spec`, given below.
-![Image with caption](/program-synthesis-primer/assets/generating-programs/spec.png "icons created by Freepik - Flaticon, monkik")
+![Image with caption](/program-synthesis-minimal/assets/generating-programs/spec.png "icons created by Freepik - Flaticon, monkik")
 
 ## the ground-truth distribution
 
 Given this particular `spec`, let's look up its row `M[spec,:]` in the meaning matrix. For every rectangle (the program), this row contains information on whether it is correct on our `spec`.
 
-![Image with caption](/program-synthesis-primer/assets/generating-programs/a-row.png)
+![Image with caption](/program-synthesis-minimal/assets/generating-programs/a-row.png)
 
 Given `spec`, the **ground-truth distribution** for program synthesis can be constructed by first counting[^model-counting] the number (`N`) of correct programs, and putting a weight of `1/N` on each.
 
-![Image with caption](/program-synthesis-primer/assets/generating-programs/gt-distri.png)
-![Image with caption](/program-synthesis-primer/assets/generating-programs/ground-truth.png ){: width="60%" }
+![Image with caption](/program-synthesis-minimal/assets/generating-programs/gt-distri.png)
+![Image with caption](/program-synthesis-minimal/assets/generating-programs/ground-truth.png ){: width="60%" }
 
 Program synthesis requires us to sample from this ground-truth distribution. Unfortunately, sampling from the ground-truth distribution is _hard_. While we can easily check if a program is correct given the spec, coming up with correct programs is difficult. 
 
@@ -29,17 +29,17 @@ Program synthesis requires us to sample from this ground-truth distribution. Unf
 
 In practice, we resort to _rejection sampling_ from this ground-truth distribution using synthesis.
 
-![Image with caption](/program-synthesis-primer/assets/generating-programs/approximate.png ){: width="75%" }
+![Image with caption](/program-synthesis-minimal/assets/generating-programs/approximate.png ){: width="75%" }
 
 Given the specification, the program writer _proposes_ (a large number of) programs, then a checker _filters_ the proposals for correctness against the spec.
 
-![Image with caption](/program-synthesis-primer/assets/synthesis-problem/synthesizer-gut2.png )
+![Image with caption](/program-synthesis-minimal/assets/synthesis-problem/synthesizer-gut2.png )
 
 ## getting a program-writer close to ground-truth
 
 The "closer" the writer distribution is to the ground-truth, the fewer programs the synthesis algorithm has to sample (i.e. more efficient)[^not-true]. Closer is formalized as an expected KL-divergence:
 
-![Image with caption](/program-synthesis-primer/assets/generating-programs/approx-goal1.png ){: width="80%" }
+![Image with caption](/program-synthesis-minimal/assets/generating-programs/approx-goal1.png ){: width="80%" }
 
 Which means, over a prior distribution of specifications `P(spec)`, we want `P_writer(prog|spec)` be close (small KL divergence) to `P_ground-truth(prog|spec)`. 
 
@@ -53,7 +53,7 @@ A **language** is a set of strings (a sequence of characters). A **language mode
 
 We start with **unconditional language models** -- models that ignore the specifications. Ignoring the specification is certainly a limitation, but it makes a good starting point.
 
-![Image with caption](/program-synthesis-primer/assets/generating-programs/prior_approx.png ){: width="50%" }
+![Image with caption](/program-synthesis-minimal/assets/generating-programs/prior_approx.png ){: width="50%" }
 
 Let's fix a typical string representing a program, `"[1,3,1,4]"`, as our target to generate. We'll analyze how well can different unconditional language models generate it.
 
@@ -97,7 +97,7 @@ What's our chances of stumbling across `"[1,3,1,4]"` now? I'll leave the combina
 ## synthesis with prior distribution
 Unconditional language models gives a **prior distribution** -- how programs are naturally distributed, in the absence of specifications. One can use the prior `P(prog)` as a writer as-is.
 
-![Image with caption](/program-synthesis-primer/assets/generating-programs/prior-synthesis.png ){: width="75%" }
+![Image with caption](/program-synthesis-minimal/assets/generating-programs/prior-synthesis.png ){: width="75%" }
 
 This often resulting in a "good enough" synthesis algorithm for a small space of programs[^lambda2], and is among the first things a synthesis practictioner will try.
 
@@ -111,31 +111,31 @@ This often resulting in a "good enough" synthesis algorithm for a small space of
 
 In conditional generation, a program writer takes `spec` into account while sampling for plausible programs. We have seen a few from last post. However, it is often simpler to _train_ a parameterized program-writer using data.
 
-![Image with caption](/program-synthesis-primer/assets/generating-programs/param-writer.png ){: width="50%" }
+![Image with caption](/program-synthesis-minimal/assets/generating-programs/param-writer.png ){: width="50%" }
 
 Here, the writer is from a parametric family of functions (e.g. neural networks with weights), and we seek to find a parameter `theta` that minimizes the expected KL-divergence between our writer distribution and the ground-truth distribution. 
 
-![Image with caption](/program-synthesis-primer/assets/generating-programs/objective-eq.png ){: width="90%" }
+![Image with caption](/program-synthesis-minimal/assets/generating-programs/objective-eq.png ){: width="90%" }
 
 We have a conundrum -- To optimize this objective, we need the ground-truth distribution to begin with! We resolve this issue by exploiting the following asymmetry:
 
-![Image with caption](/program-synthesis-primer/assets/generating-programs/the-trick.png ){: width="80%" }
+![Image with caption](/program-synthesis-minimal/assets/generating-programs/the-trick.png ){: width="80%" }
 
 ## the approximation lemma of program synthesis
 **lemma:** Let **D** be a dataset consisting of `(prog,spec)` pairs drawn from the joint-distribution `P(prog,spec)`. We can use conditional density estimation on D (i.e. supervised learning) to approximate the ground-truth synthesis distribution  [^thm1].
 
-![Image with caption](/program-synthesis-primer/assets/generating-programs/lemma.png ){: width="90%" }
+![Image with caption](/program-synthesis-minimal/assets/generating-programs/lemma.png ){: width="90%" }
 
 With a big enough dataset D and a flexible enough model class, training the program-writer `P_theta(prog|spec)` will approach the ground-truth distribution. Moreover, generating D is fully automatic and requires no human annotations! I'll show you how.
 
 ## making the dataset D of joint-distribution samples
 Each data-point of D is a tuple `(prog,spec)` from this distribution:
 
-![Image with caption](/program-synthesis-primer/assets/generating-programs/joint-sample.png ){: width="50%" }
+![Image with caption](/program-synthesis-minimal/assets/generating-programs/joint-sample.png ){: width="50%" }
 
 We first generate a program from a prior, then a specification conditioned on this program.
 
-![Image with caption](/program-synthesis-primer/assets/generating-programs/generate-D1.png ){: width="90%" }
+![Image with caption](/program-synthesis-minimal/assets/generating-programs/generate-D1.png ){: width="90%" }
 
 ## generating programs from a prior
 
@@ -148,7 +148,7 @@ Given a program, we can generate a specification for it by:
 
 For our rectangle domain, we first generate some random coordinates (inputs), and see where they lie (outputs) on a given rectangle (program). 
 
-![Image with caption](/program-synthesis-primer/assets/generating-programs/sampling-spec.png ){: width="90%" }
+![Image with caption](/program-synthesis-minimal/assets/generating-programs/sampling-spec.png ){: width="90%" }
 
 This is what it looks like in code:
 
@@ -189,7 +189,7 @@ print (D[4542]) # should see something like ('[3,5,4,6]', [((1, 0), False), ((5,
 
 One should view <ins>the dataset D as a *sampled summary* of the meaning matrix M</ins>. While it is impossible to enumerate all entries of M, we can nonetheless take samples from it. By taking more and more samples, we can better observe the landscape of M.
 
-![Image with caption](/program-synthesis-primer/assets/generating-programs/sample_D.png ){: width="80%" }
+![Image with caption](/program-synthesis-minimal/assets/generating-programs/sample_D.png ){: width="80%" }
 
 With the dataset D, we're now ready to do some learning.
 
@@ -202,14 +202,14 @@ With the dataset D, we're now ready to do some learning.
 # conditional generation with fitted unigrams
 Let's put the theory into practice using our rectangle example. One of the simplest ways to generate programs is a **unigram distribution** where, conditioned on the `spec`, samples each attributes of the program _independently_. Note that we're accepting this flawed assumption (the parameters of the rectangles are definitely not independent) for computational simplicity. 
 
-![Image with caption](/program-synthesis-primer/assets/generating-programs/factored.png ){: width="90%" }
+![Image with caption](/program-synthesis-minimal/assets/generating-programs/factored.png ){: width="90%" }
 
 We can treat a factor, such as `t`, as its own multi-way classification problem, mapping the specification to the top boundary (i.e. one of `[0, 1, ... W-2]`) of the rectangle.
 
 ## encoding the spec as a vector of binary features
 We encode the spec naively as a binary, linearized (WxWx2) feature vector.
 
-![Image with caption](/program-synthesis-primer/assets/generating-programs/bit-vec1.png ){: width="90%" }
+![Image with caption](/program-synthesis-minimal/assets/generating-programs/bit-vec1.png ){: width="90%" }
 
 {% highlight python %}
 def spec_to_bitvec(spec):
@@ -301,7 +301,7 @@ The customary plot comparing different synthesis algorithms shows **search budge
 
 We then iterate over different budgets, from 0 to 100, and count how many synthesis tasks can be solved with equal or less budget. Do this for each of the synthesizers produces the following plot:
 
-![Image with caption](/program-synthesis-primer/assets/generating-programs/synth-performance2.png ){: width="90%" }
+![Image with caption](/program-synthesis-minimal/assets/generating-programs/synth-performance2.png ){: width="90%" }
 
 As we can see, our fitted unigram writer performs even better than the manual solution.
 
@@ -315,7 +315,7 @@ In this post we covered how to obtain several reasonable program writers, includ
 -- evan 2022-08-29
 
 ## up next
-The next post cover we'll cover how to fine-tune a large language model for the same task, which offers additional flexibilities. [let's go for it](/program-synthesis-primer/generation-with-llm/)
+The next post cover we'll cover how to fine-tune a large language model for the same task, which offers additional flexibilities. [let's go for it](/program-synthesis-minimal/generation-with-llm/)
 
 ### notes
 [^model-counting]: [model counting](https://www.cs.cornell.edu/~sabhar/chapters/ModelCounting-SAT-Handbook-prelim.pdf)
@@ -328,6 +328,6 @@ The next post cover we'll cover how to fine-tune a large language model for the 
 
 [^DSL]: On one hand, any data structure (think json) that can be "executed" on an interpreter you've build is a DSL. On the other hand, you can get fairly deep into building a compiler (see you in a year!). I'd start with something simple like [this](https://youtu.be/FQFV6ikhgiQ) or [this](https://youtu.be/88lmIMHhYNs).
 
-[^thm1]: [Full derivation typical in the style of variational inference](/program-synthesis-primer/assets/generating-programs/proof_latex.png) with [kevin's approval](/program-synthesis-primer/assets/generating-programs/proof.png).
+[^thm1]: [Full derivation typical in the style of variational inference](/program-synthesis-minimal/assets/generating-programs/proof_latex.png) with [kevin's approval](/program-synthesis-minimal/assets/generating-programs/proof.png).
 
 [^logreg]: Refer to the "example" section of [this documentation on scipy's logistic regression](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html)

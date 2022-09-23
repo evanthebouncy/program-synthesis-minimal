@@ -9,14 +9,14 @@ As [Leslie](https://people.csail.mit.edu/lpk/) puts it, you must _define_ the pr
 ## grass turtle and mushrooms
 Imagine you're building a rectangular turtle enclosure on a field of 6x6 grid. You want to keep the grass inside the enclosure, and keep the mushrooms outside.
 
-![Image with caption](/program-synthesis-primer/assets/synthesis-problem/comic4.png "icons created by Freepik - Flaticon, monkik"){: width="75%" }
+![Image with caption](/program-synthesis-minimal/assets/synthesis-problem/comic4.png "icons created by Freepik - Flaticon, monkik"){: width="75%" }
 
 Given a field, how do you quickly come up with a working rectangle?
 
 ## modeling programming
 Program synthesis starts with **programming**. Programming starts with an **interpreter**.
 
-![Image with caption](/program-synthesis-primer/assets/synthesis-problem/interpreter1.png "the interpreter"){: width="65%" }
+![Image with caption](/program-synthesis-minimal/assets/synthesis-problem/interpreter1.png "the interpreter"){: width="65%" }
 
 Here's how to model an interpreter for our task.
 
@@ -69,7 +69,7 @@ print ("working as intended !")
 ## programming
 How does a programmer write a program, so that the interpreter does the right thing for a task?
 
-![Image with caption](/program-synthesis-primer/assets/synthesis-problem/does_right_stuff.png "the programming problem")
+![Image with caption](/program-synthesis-minimal/assets/synthesis-problem/does_right_stuff.png "the programming problem")
 
 There are many ways to specify a task -- imagine the different ways you can ask a developer to build an App. There are many ways to check if a program is "correct" -- imagine the different ways to test the App they built. People's real-life tasks can rarely be understood by computers. 
 
@@ -101,7 +101,7 @@ def is_correct(program, spec):
 ### programming problem 
 A typical programming problem consists of a human writing both the specification and the program, and having the computer to check if the program meets the specification.
 
-![Image with caption](/program-synthesis-primer/assets/synthesis-problem/pre-synthesis.png "the programming problem")
+![Image with caption](/program-synthesis-minimal/assets/synthesis-problem/pre-synthesis.png "the programming problem")
 
 <ins>It is crucial to solve a few programming problems by hand before attempting program synthesis</ins>. It gives insights on how to build a machine synthesizer capable of doing the same.
 {% highlight python %}
@@ -128,7 +128,7 @@ Our programming environment, `rectangle.py` [can be found here](https://gist.git
 
 With the synthesizer, a programmer writes the specification (a form of easier programming), and leaves the harder programming to the synthesizer.
 
-![Image with caption](/program-synthesis-primer/assets/synthesis-problem/synthesis1.png "the synthesis set up"){: width="75%" }
+![Image with caption](/program-synthesis-minimal/assets/synthesis-problem/synthesis1.png "the synthesis set up"){: width="75%" }
 
 The synthesis problem is turning specs into programs. It is formalized using the meaning matrix.
 
@@ -138,7 +138,7 @@ Imagine you have infinite computation, and construct the **meaning matrix M** `M
 
 <ins>M completely characterizes the synthesis problem</ins>. Assuming M can be built, the synthesis problem becomes trivial: Given a spec (row), look up a prog (col) such that the matrix entry `M[spec,prog] = True`.
 
-![Image with caption](/program-synthesis-primer/assets/synthesis-problem/hardness1.png "the synthesis hardness")
+![Image with caption](/program-synthesis-minimal/assets/synthesis-problem/hardness1.png "the synthesis hardness")
 
 ### using M to quantify difficulty
 How difficult is our synthesis problem? Some _quick maffs_ : Number of programs/rectangles is roughly `6^4`, inputs/coordinates is `6^2`, outputs/booleans is `2`. There are `(6^2)*2` input-output pairs. Assuming up to 10 grass and mushrooms on the field, there are roughly `((6^2)*2)^10` specs. Thus, we need to pre-compute a matrix of `((6^2)*2)^10 x 6^4 = 4.852e+21`. [Oh no](https://youtu.be/JqXg20sm_i4). 
@@ -149,7 +149,7 @@ Synthesis starts with writing down M -- the horrific combinatorial monster. Unde
 
 Rather than pre-computing the entirety of M, a typical program synthesis algorithm samples elements from a specific row `M[spec,:]`. This algorithm has a **program writer** that proposes different programs based on tasks, and a **program checker** that uses the interpreter and the specification to check if the proposed programs are correct. 
 
-![Image with caption](/program-synthesis-primer/assets/synthesis-problem/synthesizer-gut2.png "the synthesizer")
+![Image with caption](/program-synthesis-minimal/assets/synthesis-problem/synthesizer-gut2.png "the synthesizer")
 
 ### program writer
 The writer proposes programs given specs. Consider the most naive program writer that simply writes a random program.
@@ -228,7 +228,7 @@ How do the writers compare on a variety of different specs? Can you come up with
 -- evan 2022-08-12
 
 ## up next
-The next post cover how to systematically generate programs with language models. [let's go for it](/program-synthesis-primer/generating-programs/)
+The next post cover how to systematically generate programs with language models. [let's go for it](/program-synthesis-minimal/generating-programs/)
 
 ### notes
 [^deductive]: [Read page 117-119 on how to reverse a list using deductive synthesis](https://dl.acm.org/doi/pdf/10.1145/357084.357090)
