@@ -147,7 +147,7 @@ Synthesis starts with writing down M -- the horrific combinatorial monster. Unde
 
 ## a typical synthesis algorithm
 
-Rather than pre-computing the entirety of M, a typical program synthesis algorithm samples elements from a specific row `M[spec,:]`. This algorithm has a **program writer** that proposes different programs based on tasks, and a **program checker** that uses the interpreter and the specification to check if the proposed programs are correct. 
+Rather than pre-computing the entirety of M, a typical program synthesis algorithm samples elements from a specific row `M[spec,:]`[^npary]. This algorithm has a **program writer** that proposes different programs based on tasks, and a **program checker** that uses the interpreter and the specification to check if the proposed programs are correct. 
 
 ![Image with caption](/program-synthesis-minimal/assets/synthesis-problem/synthesizer-gut2.png "the synthesizer")
 
@@ -223,6 +223,17 @@ print (n_tries, prog)
 This is much better than using the random writer on first glance.
 
 ## exercise
+
+### reading exercise
+Read the following papers, pay more attention to their synthesis problem statement, and less to how they solve the synthesis problem. [robustfill](https://arxiv.org/abs/1703.07469), [execution guided synthesis](https://openreview.net/forum?id=H1gfOiAqYm), [repl](https://arxiv.org/abs/1906.04604), [deepcoder](https://arxiv.org/abs/1611.01989), [language to prog](https://arxiv.org/abs/1704.07926), [csg-net](https://arxiv.org/abs/1712.08290), [shrdlurn](https://arxiv.org/abs/1606.02447?context=cs). For each paper, conceptualize the meaning matrix **M** -- specifically, answer the following questions:
+- what is the DSL or space of programs considered? how big is the space (i.e. `1e4` or `1e20`)?
+- how are the programs executed on the interpreter?
+- what is the space of specifications? how big is this space?
+- what is the `is_correct` criteria for this domain?
+    - is there a way for the computer to _automatically check_ if a program is correct?
+    - is this `is_correct` check cheap or expensive to perform?
+
+### coding exercise
 How do the writers compare on a variety of different specs? Can you come up with a even better program writer? Explore these questions by [using the synthesizer code here](https://gist.github.com/evanthebouncy/ffa855eac2caa38716b3bc8d8b62645a).
 
 -- evan 2022-08-12
@@ -231,6 +242,8 @@ How do the writers compare on a variety of different specs? Can you come up with
 The next post cover how to systematically generate programs with language models. [let's go for it](/program-synthesis-minimal/generating-programs/)
 
 ### notes
+[^npary]: [numpy array indexing notations](https://intellipaat.com/blog/tutorial/python-tutorial/numpy-cheat-sheet/)
+
 [^deductive]: [Read page 117-119 on how to reverse a list using deductive synthesis](https://dl.acm.org/doi/pdf/10.1145/357084.357090)
 
 [^gend]: [Generative design](https://www.autodesk.com/solutions/generative-design)

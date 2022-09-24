@@ -8,7 +8,7 @@ A program-writer is a conduit between specifications and programs. In this post,
 
 ## a menagerie of synthesizers
 
-The synthesizer has a difficult job. It takes in semantics -- what the program should _do_, and produces syntax -- how the program should _look_. <ins>Synthesis is running an interpreter backwards</ins>.
+The synthesizer has a difficult job. It takes in semantics -- what the program should _do_, and produces syntax -- how the program should _look_[^repl]. <ins>Synthesis is running an interpreter backwards</ins>.
 
 ![Image with caption](/program-synthesis-minimal/assets/llm-generation/dual.png){: width="75%" }
 
@@ -26,11 +26,11 @@ This results in a messy co-evolution of DSL, interpreter, specification, and syn
 
 # large language models
 
-A **large language model** (llm) gives a distribution over strings (which can be) conditioned on a prefix string. Trained on an enormous amount of textual data, it can make some pretty surprising conditional generations. Below is an example from the openai-codex model, prompted with a textual input, it generates the most likely string completion as output (shown in blue highlight).
+A **large language model** (llm) gives a distribution over strings (which can be) conditioned on a prefix string. Trained on an enormous amount of textual data, it can make some pretty surprising conditional generations. Below is an example from the openai-codex model: prompted with a textual input, it generates a likely string completion as output (shown in blue highlight).
 
 ![openai codex](/program-synthesis-minimal/assets/llm-generation/codex.png){: width="95%" }
 
-The capabilities and limitations of llm are (as of 2022-aug) still being investigated. As I am learning about it myself, I encourage you to become familiar with them elsewhere. 
+The capabilities and limitations of llm are (as of 2022-aug) still being investigated. As I am learning about it myself, I encourage you to become familiar with them[^stanford]. 
 
 ## llm for synthesis ?
 These are my own assessments on why llm are useful for program synthesis. To make my case, I will show some interactions through prompting with the openai-codex model. 
@@ -56,7 +56,7 @@ The specifications and programs are often easily represented as structured texts
 ![openai codex](/program-synthesis-minimal/assets/llm-generation/codex-reframe.png){: width="80%" }
 
 ## where prompting falls short
-For our rectangle example, prompting cannot be used to generate a valid rectangle for the spec. In fact, llm+prompting fails very often for the specific problems we want to solve out of the box -- the llm is trained on internet text data that are too different from our task (in appearance).
+For our rectangle example, prompting cannot be used to generate a valid rectangle for the spec. In fact, llm+prompting fails very often for the specific problems we want to solve out of the box -- the llm is trained on internet text data that are too different from our task.
 
 ![openai codex](/program-synthesis-minimal/assets/llm-generation/prompt-fail1.png){: width="100%" }
 
@@ -78,7 +78,7 @@ The model only operates over sequences of ids, and relies the tokenizer to trans
 
 ![Image with caption](/program-synthesis-minimal/assets/llm-generation/tokenizer-model1.png){: width="100%" }
 
-We'll fine-tune the light-weight `byt5-base` model (2.17Gb). It treats each character (such as `a` or `]`) as its own token (total 256 token-ids). One does not need a "truly large" model, since we'll be giving it on plenty in-domain datapoints. Getting the model and the tokenizer is fairly easy.
+We'll fine-tune the light-weight `byt5-base` model (2.17Gb). It treats each character (such as `a` or `]`) as its own token (total 256 token-ids). One does not need a "truly large" model, since we'll be giving it on plenty of in-domain datapoints. Getting the model and the tokenizer is fairly easy.
 
 {::comment}
 Compared to codex (>50k token-ids), it does not need to maintain a hefty embedding layer that maps tokens to a continuous representation.
@@ -106,9 +106,9 @@ D_test = sample_D(1000)
 {% endhighlight %}
 
 ## encoding the spec and prog
-Encoding requires creativity -- you want to accentuate the information for the model to make the correct decision. The run-time of the transformer algorithm is O(n^2), which is sensitive to the length of the strings. Thus, I simply try to minimize the length of the spec represenation.
+Encoding requires creativity -- you want to accentuate the information for the model to make the correct decision. The run-time of the transformer algorithm is O(n^2), which is sensitive to the length of the strings. Thus, I simply try to minimize the length of the spec *represenation*.
 
-Do keep in mind that re-naming the tokens comes at a cost of how the model can interpret natural language -- for instance, if you rename 'blue' as '+'. I am not too familiar with using language as specification (yet) but I will become good at it and tell you all about it when I can :).
+Do keep in mind that re-naming the tokens comes at a cost of how the model can interpret natural language -- for instance, if you rename 'blue' as '+'. This is usually fine if you have enough fine-tuning examples (for program synthesis, we can usually generate as many `(prog,spec)` pairs as we want).
 
 {% highlight python %}
 def spec_to_str(spec):
@@ -141,7 +141,7 @@ class Collator:
     return ret
 {% endhighlight %}
 
-## interpreting training loss
+## training, and interpreting the training loss
 
 Training with the huggingface API is quite simple, simply call the Seq2Seq trainer class.
 {% highlight python %}
@@ -153,9 +153,11 @@ As the model is training, you will see the loss
 
 ![Image with caption](/program-synthesis-minimal/assets/llm-generation/training_loss.png){: width="40%" }
 
-<ins>The loss can be interpreted as **per-token-perplexity**</ins>. A loss of `1.18` means the per-token-perplexity is `e^1.18 = 3.25`, or a 1 in 3.25 chance of sampling the corresponding token from the ground-truth string. A loss of `0.5` means the token-perplexity is `e^0.5 = 1.64`. 
+The loss tells us how closely does the model's distribution match the training data, smaller loss means closer match. Quantitatively, <ins>the loss can be interpreted as a **per-token-perplexity**</ins>, we'll explain this with an example.
 
-A target program string, `[T,D,L,R]`, has a length of 9, so at iteration-500, we have a chance of `1 / 3.25^9` or 1 in 40453 to recover the target program, and at iteration-1000 we have a chance of `1 / 1.64^9` or 1 in 86. However, given a spec, there are _multiple_ satisfying programs beside the one target program given during training, so this is strictly a _lower bound_.
+Let's say we have a training data-point `("11+33+04-41-","[1,3,1,4]")`, and it has a loss of `1.18` at iteration-500. It means that given the input `"11+33+04-41-"`, on average, each token in `[1,3,1,4]` has a perplexity of `e^1.18 = 3.25`, or a 1 in 3.25 chance of being correctly generated. As `[1,3,1,4]` has a total of 9 tokens, and our model generates it 1 token at a time, the entire sequence has a `1 / 3.25^9 = 1 / 40453` chance of being correctly generated by our model.
+
+At iteration-1000 we have a loss of `0.5`, or a token-perplexity of `e^0.5 = 1.64`. Thus, the model has a `1 / 1.64^9 = 1 / 86` chance of generating the entire correct sequence. However, given a spec, there may be _multiple_ satisfying programs, and the "1 in 86 chance" only speaks of a particular program, `[1,3,1,4]`. The model may very well find a different program that is also correct, making `1 / 86` a _lower bound_.
 
 ## inference
 
@@ -170,8 +172,6 @@ def generate_samples_with_temp(txt, n_samples, temp):
 
 generate_samples_with_temp(repr(D_test[0][1]), 5, 1.0)
 # ['[4,6,1,6]', '[1,5,3,5]', '[2,3,4,6]','[4,5,0,2]','[1,4,4,5]']
-generate_samples_with_temp(repr(D_test[0][1]), 5, 1e-10)
-# ['[1,5,2,4,6]', '[1,4,3,5]', '[1,4,3,6]', 'e][3,5,2,4]', '4,6,4,5]']
 generate_samples_with_temp(repr(D_test[0][1]), 5, 3.0)
 # ['[Tb2,2,6}', 'ee[>1,6,265,741F4]', '[0o9ѕdr_a|4,80,7]6ٓ5]і-$4732"r-H,', '[2˴в[4,4,3', '[A518,2/8žrev0B;D']
 {% endhighlight %}
@@ -180,7 +180,7 @@ This result is quite incredible, after fine-tuning, a llm that in theory can gen
 
 ## making a synthesizer with fine-tuned llm
 
-We simply integrating the `llm_writer` into the synthesizer. As during training we have roughly 1 in 86 chance to recover the correct program (this being a lower bound), then a search budget of 20 is reasonable. <ins>As of today, inference from llm is still relatively slow compared to the tens of thousands of samples typically required for a SOTA program synthesizer</ins>, but I don't think this will be a problem few years down the road -- we just wait.
+We simply integrate the `llm_writer` into the synthesizer. As during training we have roughly 1 in 86 chance to recover the correct program (this being a lower bound), then a search budget of 20 is reasonable. <ins>As of today, inference from llm is still relatively slow compared to the tens of thousands of samples typically required for a SOTA program synthesizer</ins>, but I don't think this will be a problem few years down the road -- we just wait.
 
 {% highlight python %}
 def llm_writer(spec):
@@ -201,14 +201,22 @@ As we can see, by simply manipulating some strings, we were able to beat the oth
 
 It requires [rectangle.py](https://gist.github.com/evanthebouncy/25114aaf0be20df21468735aa7103bef) and [rectangle_lm.py](https://gist.github.com/evanthebouncy/1703d3e9aee71ba9124405fdb30bd967) which were defined in previous posts.
 
-# conclusion
+## exercise
 
-This concludes my 4 part series on the primer to program synthesis, I hope you enjoyed reading it as much as I had fun writing it. I will post more synthesis topics as they become "mature enough" for a succinct blog post. You can reach out to me and suggest new topics for me to write about. I'll be announcing these updates on twitter.
+Use different sampling methods such as top-p sampling or beam-search to take samples from our fine-tuned llm [using this guide for reference](https://huggingface.co/blog/how-to-generate). Which sampling algorith is more efficient given different search budgets?
 
-[!Please follow my twitter for more contents!](https://twitter.com/evanthebouncy) (tryna grow my twitter game lol).
+# conclusion future works
+This concludes my 3 part series, I hope you enjoyed reading it as much as I had fun writing it. Most importantly, I hope you are comfortable starting a program synthesis project. 
+
+I will post more synthesis topics as they become "mature enough" for a succinct blog post. I'll be announcing these updates on my twitter[^tweet]. You can suggest new topics for me to write about, and please let me know if I was mistaken or unclear in my writings (I'll patch those up).
 
 -- evan 2022-08-31
 
 ### notes
 [^tweet1]: [gpt3 generating coherent codes](https://twitter.com/goodside/status/1563989550808154113)
 
+[^repl]: The gap between syntax and semantics motivated some of our works on execution-guided synthesis such as [this](https://arxiv.org/abs/1906.04604) and [this](https://arxiv.org/abs/2012.12964).
+
+[^stanford]: [CS324, a stanford course on understanding and developing large language models](https://stanford-cs324.github.io/winter2022/lectures/introduction/)
+
+[^tweet]: [Please follow my twitter for more program synthesis contents](https://twitter.com/evanthebouncy). Feel free to DM me with anything program synthesis related.

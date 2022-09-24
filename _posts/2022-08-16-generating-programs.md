@@ -309,6 +309,9 @@ As we can see, our fitted unigram writer performs even better than the manual so
 
 [All code for this post can be found here](https://gist.github.com/evanthebouncy/1703d3e9aee71ba9124405fdb30bd967). It depends on [rectangle.py](https://gist.github.com/evanthebouncy/25114aaf0be20df21468735aa7103bef)
 
+## exercise
+Extend the unigram generation above to bigram generation[^dreamcoder] instead, does it perform better?
+
 ## conclusion
 In this post we covered how to obtain several reasonable program writers, including the generating from the prior, and by training on synthetically generated data.
 
@@ -322,7 +325,7 @@ The next post cover we'll cover how to fine-tune a large language model for the 
 
 [^not-true]: This is not entirely accurate. In practice, we're often interested in finding _just one_ correct program instead of uniformly sampling from _every_ correct program.
 
-[^karpathy]: You can find good resources online about language modeling, such as [a short intro to language modeling by Karpathy](https://youtu.be/PaCmpygFfXo)
+[^karpathy]: You can find good resources online about language modeling, such as [CS324 - intro to large language models from Stanford](https://stanford-cs324.github.io/winter2022/lectures/introduction/) or [a video on language modeling by Karpathy](https://youtu.be/PaCmpygFfXo).
 
 [^lambda2]: Enumerative synthesis such as [lambda-squared by John Feser](https://www.cs.utexas.edu/~swarat/pubs/pldi15.pdf) uses program-length prior distribution (longer programs are less likely) and aggressive space-pruning.
 
@@ -330,4 +333,6 @@ The next post cover we'll cover how to fine-tune a large language model for the 
 
 [^thm1]: [Full derivation typical in the style of variational inference](/program-synthesis-minimal/assets/generating-programs/proof_latex.png) with [kevin's approval](/program-synthesis-minimal/assets/generating-programs/proof.png).
 
-[^logreg]: Refer to the "example" section of [this documentation on scipy's logistic regression](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html)
+[^logreg]: [video tutorial on logistic regression](https://youtu.be/J5bXOOmkopc)
+
+[^dreamcoder]: Kevin Ellis leverages [bigram enumeration](https://github.com/ellisk42/ec/blob/db2d0efcf01064056c4882f6ccd3b5c9c674d9c0/dreamcoder/likelihoodModel.py) for his [dream-coder system](https://arxiv.org/pdf/2006.08381.pdf)
