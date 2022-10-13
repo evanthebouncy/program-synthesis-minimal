@@ -161,7 +161,7 @@ At iteration-1000 we have a loss of `0.5`, or a token-perplexity of `e^0.5 = 1.6
 
 ## inference
 
-After training (fine-tuning) on D, we can sample a few program-strings from specification! The key parameter to sampling is **temperature**, a temperature of 1.0 is typically good -- if you trust your model has fully learned the ground-truth distribution, a temperature of 1.0 is exactly it. A too-low temperature will ruin diversity, a too-high temperature will be too chaotic.
+After training (fine-tuning) on D, we can sample a few program-strings from specification -- these are the candidates for rejection sampling down the line. The key parameter to sampling is **temperature**, a temperature of 1.0 is typically good -- if you trust your model has fully learned the ground-truth distribution, a temperature of 1.0 is exactly it. A too-low temperature will ruin diversity, a too-high temperature will be too chaotic.
 
 {% highlight python %}
 def generate_samples_with_temp(txt, n_samples, temp):
@@ -208,7 +208,7 @@ Use different sampling methods such as top-p sampling or beam-search to take sam
 # conclusion future works
 This concludes my 3 part series, I hope you enjoyed reading it as much as I had fun writing it. Most importantly, I hope you are comfortable starting a program synthesis project. 
 
-I will post more synthesis topics as they become "mature enough" for a succinct blog post. I'll be announcing these updates on my twitter[^tweet]. You can suggest new topics for me to write about, and please let me know if I was mistaken or unclear in my writings (I'll patch those up).
+I will post more synthesis topics as they become "mature enough" for a succinct blog post. I'll be announcing these updates on my [twitter (gimme a follow!)](https://twitter.com/evanthebouncy)[^tweet]. You can suggest new topics for me to write about, and please let me know if I was mistaken or unclear in my writings.
 
 -- evan 2022-08-31
 
@@ -219,4 +219,4 @@ I will post more synthesis topics as they become "mature enough" for a succinct 
 
 [^stanford]: [CS324, a stanford course on understanding and developing large language models](https://stanford-cs324.github.io/winter2022/lectures/introduction/)
 
-[^tweet]: [Please follow my twitter for more program synthesis contents](https://twitter.com/evanthebouncy). Feel free to DM me with anything program synthesis related.
+[^tweet]: [follow my twitter for more program synthesis contents](https://twitter.com/evanthebouncy). Also, feel free to DM me with anything program synthesis related.

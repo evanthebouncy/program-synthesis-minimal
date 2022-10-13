@@ -10,7 +10,7 @@ permalink: /what-is-synthesis/
 
 Recently (as of 2022), the topic of "building AI to write code" has become fashionable in both industry and academia, with [copilot](https://github.com/features/copilot) making its way to production (if you have not used it, stop reading and play with it first). However, program synthesis is more than generating few lines of code from comments. Programs are broadly useful in modeling both computation and communication, and whenever programs exist, program synthesis is sure to follow. 
 
-<ins>This blog series is a primer to the **modern**, **practical** aspects of program synthesis.</ins> I intend to keep the write-ups concise, at a cost of accuracy. The examples will be pedagogical, introducing you to a concept and coding it up using off-the-shelf technologies, at a cost of fidelity. The goal is 入门 (to get your foot through the door), so you can read and replicate academic literatures, and have the confidence to apply program synthesis to your own works. 
+<ins>This blog series serves as a entry-point to the **practical**, **modern** aspects of program synthesis.</ins> I intend to keep the write-ups concise, at a cost of accuracy. The examples will be pedagogical, introducing you to a concept and coding it up using off-the-shelf technologies, at a cost of fidelity. The goal is 入门 (to get your foot through the door), so you can read and replicate academic literatures, and have the confidence to apply program synthesis to your own works. 
 
 This blog is intented for undergraduate/graduate level researchers with knowledge of machine-learning, who want to "get into" program synthesis. Some level of mathematical maturity will be assumed, but not essential as the algorithms and applications are self-contained.
 
@@ -53,6 +53,9 @@ We can take a [Joshian](https://youtu.be/RB78vRUO6X8) point of view (gesturing w
 ![Image with caption](/program-synthesis-minimal/assets/what-is-this/synthesis-ultimate1.png "human-program")
 
 Of course, we don't have to be limited by human programming capabilities. We aim to build a synthesizer that can to go even further beyond!! AAaaaaaAaaA[AAaaaAA](https://youtu.be/3FM2kbvYljw?t=18)AAaaAaahhHHhHHhH (okay I'll stop).
+
+## exercise
+In program synthesis, the word _intent_ always shows up, and yet is rarely formally defined. Pick several different programming scenarios and attempt to formalize the notion of programmer's intent in your own words. How easy would it be to convey this formalized intent to a fellow human? How easy would it be to convey it to a machine?
 
 -- evan  2022-08-11
 
