@@ -17,4 +17,4 @@ Feel free to create an issue on [GitHub](https://github.com/evanthebouncy/progra
 
 ### a list of contributors
 These are the friends who helped me shape my writings for this blog post, in no particular order.
-[Sam Acquaviva](https://samacquaviva.com/), [黄迪](https://github.com/huangdi95), [Saujas Vaduguru](https://twitter.com/saujasv), [Armando Solar-Lezama](https://people.csail.mit.edu/asolar/), [Daniel Fried](https://twitter.com/dan_fried), [Leslie P. Kaelbling](https://people.csail.mit.edu/lpk/), [Robert Hawkins](https://twitter.com/hawkrobe), [Leonardo Hernández Cano](https://iamleo.space/).
+[Kevin Ellis](https://www.cs.cornell.edu/~ellisk/), [Sam Acquaviva](https://samacquaviva.com/), [黄迪](https://github.com/huangdi95), [Saujas Vaduguru](https://twitter.com/saujasv), [Armando Solar-Lezama](https://people.csail.mit.edu/asolar/), [Daniel Fried](https://twitter.com/dan_fried), [Leslie P. Kaelbling](https://people.csail.mit.edu/lpk/), [Robert Hawkins](https://twitter.com/hawkrobe), [Leonardo Hernández Cano](https://iamleo.space/).
