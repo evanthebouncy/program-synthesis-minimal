@@ -6,6 +6,8 @@ hidden: true
 permalink: /what-is-synthesis/
 ---
 
+Read it in [中文](/program-synthesis-minimal/what-is-synthesis-cn/).
+
 # so, you want to know about program synthesis?
 
 Recently (as of 2022), the topic of "building AI to write code" has become fashionable in both industry and academia, with [copilot](https://github.com/features/copilot) making its way to production (if you have not used it, stop reading and play with it first). However, program synthesis is more than generating few lines of code from comments. Programs are broadly useful in modeling both computation and communication, and whenever programs exist, program synthesis is sure to follow. 
